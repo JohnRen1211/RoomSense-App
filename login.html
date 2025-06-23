@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Auth</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen font-sans">
+
+  <div class="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
+    <h2 id="formTitle" class="text-2xl font-bold text-center text-orange-600 mb-6">Create Account</h2>
+
+    <!-- Signup Form -->
+    <form id="signupForm" class="space-y-4">
+      <input type="text" id="name" placeholder="Full Name" required
+             class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"/>
+
+      <input type="email" id="email" placeholder="Email" required
+             class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"/>
+
+      <input type="password" id="password" placeholder="Password" required
+             class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"/>
+
+      <button type="submit"
+              class="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded transition">
+        Sign Up
+      </button>
+    </form>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="space-y-4 hidden">
+      <input type="email" id="loginEmail" placeholder="Email" required
+             class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"/>
+
+      <input type="password" id="loginPassword" placeholder="Password" required
+             class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"/>
+
+      <button type="submit"
+              class="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded transition">
+        Log In
+      </button>
+    </form>
+
+    <!-- Toggle Button -->
+    <p class="mt-4 text-sm text-center text-gray-700">
+      <span id="toggleText">Already have an account?</span>
+      <button id="toggleButton" class="text-orange-600 font-medium hover:underline">Log in here</button>
+    </p>
+
+    <p id="message" class="mt-4 text-sm text-center text-gray-700"></p>
+  </div>
+
+  <!-- Auth Logic -->
+  <script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+      const SUPABASE_URL = 'https://vzubmycafgnjtwnjfpop.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6dWJteWNhZmduanR3bmpmcG9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQzNDY2NTQsImV4cCI6MjA1OTkyMjY1NH0.fDzlvR0xT3Sm8BTlCnEbxC8WE8-H3ZBRxA9SeEViaeo';
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      const signupForm = document.getElementById('signupForm');
+      const loginForm = document.getElementById('loginForm');
+      const messageBox = document.getElementById('message');
+      const toggleButton = document.getElementById('toggleButton');
+      const formTitle = document.getElementById('formTitle');
+      const toggleText = document.getElementById('toggleText');
+
+      // Toggle between login and signup forms
+      toggleButton.addEventListener('click', () => {
+        const isSignup = signupForm.classList.contains('hidden');
+        signupForm.classList.toggle('hidden');
+        loginForm.classList.toggle('hidden');
+        formTitle.textContent = isSignup ? 'Create Account' : 'Welcome Back';
+        toggleText.textContent = isSignup
+          ? 'Already have an account?'
+          : 'Don’t have an account?';
+        toggleButton.textContent = isSignup ? 'Log in here' : 'Sign up here';
+        messageBox.textContent = '';
+      });
+
+      // Signup logic
+      signupForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        if (!name || !email || !password) {
+          messageBox.textContent = '⚠️ Please fill in all fields.';
+          return;
+        }
+
+        const { data, error } = await supabase.auth.signUp({ email, password });
+
+        if (error) {
+          messageBox.textContent = '❌ ' + error.message;
+          return;
+        }
+
+        const user = data.user ?? data.session?.user;
+        if (!user) {
+          messageBox.textContent = '⚠️ Signup succeeded, but user not returned.';
+          return;
+        }
+
+        const { error: profileError } = await supabase.from('profiles').insert([{
+          id: user.id,
+          email,
+          name,
+          role: 'admin',
+          approved: false // For approval logic
+        }]);
+
+        if (profileError) {
+          messageBox.textContent = '✅ Account created, but profile insert error: ' + profileError.message;
+          return;
+        }
+
+        messageBox.textContent = '✅ Account created! Check your email to verify.';
+      });
+
+// Login logic
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+
+  if (!email || !password) {
+    messageBox.textContent = '⚠️ Please enter email and password.';
+    return;
+  }
+
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    messageBox.textContent = '❌ ' + error.message;
+    return;
+  }
+
+  // Optional: check if approved (if approval logic used)
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('approved')
+    .eq('id', data.user.id)
+    .single();
+
+  if (profile && !profile.approved) {
+    await supabase.auth.signOut();
+    messageBox.textContent = '⛔ Account not yet approved by admin.';
+    return;
+  }
+
+  // ✅ Redirect to index page
+  messageBox.textContent = '✅ Logged in successfully! Redirecting...';
+  setTimeout(() => {
+    window.location.href = 'index.html';
+  }, 1500); // Wait 1.5 seconds before redirect
+});
+
+    });
+  </script>
+</body>
+</html>

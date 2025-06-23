@@ -1,0 +1,916 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>ROOM DETAILS</title>
+		<link rel="icon" href="favicon.ico" type="image/x-icon" />
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+		<script src="https://kit.fontawesome.com/0d66da6825.js" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+	</head>
+    <body class="bg-gray-100 min-h-screen">
+              <!-- Sidebar -->
+            <div class="fixed h-full bg-orange-600 group transition-all duration-300 w-16 hover:w-64">
+              <div class="flex flex-col h-full">
+                    <a href="#" class="flex items-center p-4 border-b border-b-white">
+                      <img src="/images/CpELogo.jpg" alt="placeholder" class="w-8 h-8 rounded object-cover">
+                      <span class="ml-3 text-lg font-poppins text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          CpE Department
+                      </span>
+                  </a>
+                  <ul class="flex flex-col mt-4 space-y-2">
+                    <li><a href="./index.html" class="flex items-center px-4 py-2 text-white rounded-md hover:bg-orange-500 transition-all duration-300"><i class="fas fa-home text-2xl"></i><span class="ml-3 text-lg font-poppins opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Dashboard</span></a></li>
+                    <li><a href="./RoomManual.html" class="flex items-center px-4 py-2 text-white rounded-md hover:bg-orange-500 transition-all duration-300"><i class="fas fa-th-large text-2xl"></i><span class="ml-3 text-lg font-poppins opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Rooms</span></a></li>
+                    <li><a href="./SchedOriginal.html" class="flex items-center px-4 py-2 text-white rounded-md hover:bg-orange-500 transition-all duration-300"><i class="fas fa-calendar-alt text-2xl"></i><span class="ml-3 text-lg font-poppins opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Schedule</span></a></li>
+                    <li><a href="./logs.html" class="flex items-center px-4 py-2 text-white rounded-md hover:bg-orange-500 transition-all duration-300"><i class="fas fa-file-alt text-2xl"></i><span class="ml-3 text-lg font-poppins opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Logs</span></a></li>
+                </ul>
+              </div>
+          </div>
+
+  <!--BOXES-->
+  <div class="ml-16 p-6">
+    <h1 class="text-3xl font-bold text-orange-600 mb-4">Room Details</h1>
+
+    <!-- Flex container for all 4 boxes in one horizontal line -->
+    <div class="flex flex-col lg:flex-row gap-6 items-stretch min-h-[400px]">
+
+      <!-- 1. Room Buttons -->
+      <div class="bg-white shadow-md rounded-lg p-4 w-60 h-[35rem] flex-shrink-0">
+        <h2 class="text-lg text-orange-500 font-bold mb-4">Rooms in CPE</h2>
+  <div class="flex flex-col space-y-2 flex-grow">
+  <button data-room="300" onclick="handleRoomClick('300', event)" class="room-btn border px-3 py-2 w-full rounded hover:bg-orange-100 transition-colors">ROOM 300</button>
+  <button data-room="310" onclick="handleRoomClick('310', event)" class="room-btn border px-3 py-2 w-full rounded hover:bg-orange-100 transition-colors">ROOM 310</button>
+  <button data-room="311" onclick="handleRoomClick('311', event)" class="room-btn border px-3 py-2 w-full rounded hover:bg-orange-100 transition-colors">ROOM 311</button>
+  <button data-room="312" onclick="handleRoomClick('312', event)" class="room-btn border px-3 py-2 w-full rounded hover:bg-orange-100 transition-colors">ROOM 312</button>
+  <button data-room="313" onclick="handleRoomClick('313', event)" class="room-btn border px-3 py-2 w-full rounded hover:bg-orange-100 transition-colors">ROOM 313</button>
+  <button data-room="314" onclick="handleRoomClick('314', event)" class="room-btn border px-3 py-2 w-full rounded hover:bg-orange-100 transition-colors">ROOM 314</button>
+  <button data-room="315" onclick="handleRoomClick('315', event)" class="room-btn border px-3 py-2 w-full rounded hover:bg-orange-100 transition-colors">ROOM 315</button>
+  <button data-room="316" onclick="handleRoomClick('316', event)" class="room-btn border px-3 py-2 w-full rounded hover:bg-orange-100 transition-colors">ROOM 316</button>
+  </div>
+      </div>
+
+      <!-- 2. Room Details -->
+      <div class="bg-white shadow-md rounded-lg p-6 flex-grow min-w-[300px] h-[35rem]">
+        <h2 class="text-xl text-orange-500 font-bold mb-4">Room Details</h2>
+        <div class="space-y-4">
+          <div class="flex justify-between">
+            <span class="font-medium">Room Status</span>
+            <span id="room-status" class="font-bold text-gray-800">UNKNOWN</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-medium">Room Number</span>
+            <span id="room-no" class="font-semibold">N/A</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-medium">Section</span>
+            <span id="occupied-by" class="font-semibold">N/A</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-medium">Subject</span>
+            <span id="room-type-details" class="font-semibold">N/A</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-medium">Professor</span>
+            <span id="instructor" class="font-semibold">N/A</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-medium">Schedule</span>
+            <span id="room-schedule" class="font-semibold">N/A</span>
+          </div>
+          <div class="flex justify-between items-start">
+            <div class="font-medium flex flex-col">
+              <span>Scanned In</span>
+              <span class="text-xs text-gray-500">*Only available in Room 315</span>
+            </div>
+            <span id="scan-status" class="font-semibold flex items-center gap-2">
+              <span id="scan-indicator" class="w-3 h-3 rounded-full bg-gray-400 inline-block"></span>
+              <span id="scan-label">No scan</span>
+            </span>
+          </div>
+        </div>
+        
+      </div>
+
+      <!-- 3 & 4 stacked vertically in right column -->
+      <div class="flex flex-col gap-6 flex-grow min-w-[320px]">
+           <!-- Sensor Details -->
+<div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+  <!-- Combined Sensor Box -->
+  <div class="w-full hidden">
+    <div class="bg-white shadow-md rounded-lg p-3 w-full">
+      <h2 class="text-lg text-orange-500 font-bold mb-3">Combined Sensor Details</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+        <!-- Temperature -->
+        <div class="bg-white p-3 rounded-lg shadow flex flex-col w-full">
+          <div class="flex items-center gap-2 mb-2 border-b border-gray-300 pb-1">
+            <div class="text-sm sm:text-base text-orange-500 font-bold" id="temperature-combined">Aircon Status: --</div>
+            <div class="text-sm sm:text-base text-orange-500 font-bold hidden" id="temperatureCombined">Temperature: -- °C</div>
+            <img src="/images/temp.png" alt="Temperature Icon" class="w-6 h-6 object-contain ml-auto">
+          </div>
+          <h2 class="text-sm sm:text-base font-bold text-orange-500 italic text-center mt-auto">Temperature</h2>
+        </div>
+
+        <!-- Presence -->
+        <div class="bg-white p-3 rounded-lg shadow flex flex-col w-full">
+          <div class="flex items-center gap-2 mb-2 border-b border-gray-300 pb-1">
+            <div class="flex items-center justify-center bg-gray-100 text-orange-500 font-bold rounded-full text-xs px-2 py-0.5 whitespace-nowrap" id="motion-combined-status">Motion Status: --</div>
+            <img src="/images/presence.png" alt="Presence Icon" class="w-6 h-6 object-contain ml-auto">
+          </div>
+          <h2 class="text-sm sm:text-base font-bold text-orange-500 italic text-center mt-auto">Presence</h2>
+        </div>
+
+        <!-- Humidity -->
+        <div class="bg-white p-3 rounded-lg shadow flex flex-col w-full">
+          <div class="flex items-center gap-2 mb-2 border-b border-gray-300 pb-1">
+            <div class="text-sm sm:text-base text-blue-500 font-bold" id="humidity2">Humidity: -- %</div>
+            <img src="/images/humidity.png" alt="Humidity Icon" class="w-6 h-6 object-contain ml-auto">
+          </div>
+          <h2 class="text-sm sm:text-base font-bold text-orange-500 italic text-center mt-auto">Humidity</h2>
+        </div>
+
+        <!-- Lights -->
+        <div class="bg-white p-3 rounded-lg shadow flex flex-col w-full">
+          <div class="flex items-center gap-2 mb-2 border-b border-gray-300 pb-1">
+            <div class="text-sm sm:text-base text-orange-500 font-bold" id="light-status-combined">Light Status: --</div>
+            <div class="text-sm sm:text-base text-orange-500 font-bold hidden" id="light2">Light: --</div>
+            <img src="/images/light.png" alt="Lights Icon" class="w-6 h-6 object-contain ml-auto">
+          </div>
+          <h2 class="text-sm sm:text-base font-bold text-orange-500 italic text-center mt-auto">Lights</h2>
+        </div>
+
+        <!-- Timestamp -->
+        <div class="text-sm text-gray-500 mt-2 col-span-full" id="timestampsCombined">Timestamp: --</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+          <!-- PHYSICAL FACILITIES CONTAINER -->
+      <div class="bg-white shadow-md rounded-lg p-3 flex-1">
+            <!-- Inventory box -->
+    <div class="bg-white p-6 rounded shadow-lg max-w-4xl">
+      <h2 class="text-lg text-orange-500 font-bold mb-3" id="room-title">Room inventory</h2>
+      <div id="inventory" class="space-y-4 w-full">
+        <!-- Inventory items will appear here -->
+      </div>
+    </div>
+        </div>     
+
+
+					<!-- BOTTOM SECTION -->
+					<!-- Left: Put schedules of room here depending which room is clicked -->
+					<div class="w-full bg-white p-6 rounded-lg shadow-lg flex-col hidden">
+						<h2 class="text-2xl font-bold text-orange-600 mb-2">Room Schedule</h2>
+						<table id="schedule-table" class="min-w-full bg-white border border-gray-200">
+							<thead>
+								<tr>
+									<th class="px-4 py-2 border">Date</th>
+									<th class="px-4 py-2 border">Time</th>
+									<th class="px-4 py-2 border">Subject</th>
+									<th class="px-4 py-2 border">Professor</th>
+									<th class="px-4 py-2 border">Section</th>
+								</tr>
+							</thead>
+							<tbody id="schedule-container">
+								<!-- Schedule will be populated here dynamically -->
+								<tr>
+									<td colspan="6" class="px-4 py-2 text-center text-gray-500">No schedule found.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+        
+    </div>
+  </div>
+  <!--For rooms-->
+<script>
+  // Scripts for room and inventory
+  const supabaseClient = supabase.createClient(
+    'https://vzubmycafgnjtwnjfpop.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6dWJteWNhZmduanR3bmpmcG9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQzNDY2NTQsImV4cCI6MjA1OTkyMjY1NH0.fDzlvR0xT3Sm8BTlCnEbxC8WE8-H3ZBRxA9SeEViaeo'
+  );
+
+  let manualOverrides = {};
+  let currentRoom = null;
+  const inventoryItems = [
+    { key: 'tv', label: 'TVs', column: 'tv_count' },
+    { key: 'fan', label: 'Fans', column: 'fan_count' },
+    { key: 'chair', label: 'Chairs', column: 'chair_count' },
+    { key: 'monoblock', label: 'Monoblocks', column: 'monoblock_count' }
+  ];
+  let inventoryCounts = {};
+
+  async function handleRoomClick(roomNumber, event) {
+    try {
+      currentRoom = roomNumber;
+      
+      document.querySelectorAll('.room-btn').forEach(btn => {
+        btn.classList.remove('border-4', 'border-black', 'bg-blue-700', 'bg-blue-500');
+      });
+      if (event) {
+        event.target.classList.add('border-4', 'border-black');
+        event.target.classList.add('bg-blue-700');
+      }
+
+      await Promise.all([
+        updateRoomStatus(roomNumber, event),
+        loadInventory(roomNumber)
+      ]);
+      
+      document.querySelector('#inventory-box')?.scrollIntoView({ 
+        behavior: 'smooth' 
+      });
+    } catch (error) {
+      console.error('Room handling error:', error);
+      alert('Error loading room data');
+    }
+  }
+
+  async function loadInventory(roomNumber) {
+    const container = document.getElementById('inventory');
+    if (!container) return;
+
+    container.innerHTML = '<div class="text-gray-500">Loading inventory...</div>';
+
+    try {
+      const { data, error } = await supabaseClient
+        .from('room_inventory2')
+        .select('*')
+        .eq('room', roomNumber)
+        .single();
+
+      if (error && error.code !== 'PGRST116') throw error;
+      
+      inventoryCounts = data ? {
+        tv: data.tv_count || 0,
+        fan: data.fan_count || 0,
+        chair: data.chair_count || 0,
+        monoblock: data.monoblock_count || 0
+      } : { tv: 0, fan: 0, chair: 0, monoblock: 0 };
+
+      renderInventory();
+    } catch (error) {
+      console.error('Inventory error:', error);
+      container.innerHTML = '<div class="text-red-500">Error loading inventory</div>';
+    }
+  }
+
+  function renderInventory() {
+    const container = document.getElementById('inventory');
+    if (!container || !currentRoom) return;
+
+    container.innerHTML = inventoryItems.map(item => `
+      <div class="flex items-center justify-between py-2 border-b">
+        <span class="font-medium">${item.label}:</span>
+        <input 
+          type="number" 
+          min="0" 
+          value="${inventoryCounts[item.key] || 0}"
+          class="w-20 px-2 py-1 border rounded text-center"
+          onchange="updateInventory('${item.key}', this.value)"
+        >
+      </div>
+    `).join('');
+    
+    document.getElementById('room-title').textContent = `Inventory for Room ${currentRoom}`;
+  }
+
+  async function updateInventory(itemKey, value) {
+    const newCount = parseInt(value);
+    if (isNaN(newCount)) return;
+
+    try {
+      const item = inventoryItems.find(i => i.key === itemKey);
+      if (!item) throw new Error('Invalid inventory item');
+
+      const { error } = await supabaseClient
+        .from('room_inventory2')
+        .upsert({ 
+          room: currentRoom,
+          [item.column]: newCount 
+        }, { onConflict: 'room' });
+
+      if (error) throw error;
+      
+      inventoryCounts[itemKey] = newCount;
+      renderInventory();
+    } catch (error) {
+      console.error('Update error:', error);
+      alert('Error updating inventory');
+      renderInventory();
+    }
+  }
+
+  function manualOverrideChanged() {
+    const value = document.getElementById("overrideStatus").value;
+    if (currentRoom) {
+      manualOverrides[currentRoom] = value;
+      updateRoomStatus(currentRoom);
+    }
+  }
+
+  async function updateRoomStatus(room, event) {
+    currentRoom = room;
+    const roomStatusElement = document.getElementById("room-status");
+    const roomNoElement = document.getElementById("room-no");
+    const roomTypeElement = document.getElementById("room-type-details");
+    const roomScheduleElement = document.getElementById("room-schedule");
+    const occupiedByElement = document.getElementById("occupied-by");
+    const instructorElement = document.getElementById("instructor");
+    const scanIndicator = document.getElementById("scan-indicator");
+    const scanLabel = document.getElementById("scan-label");
+
+    resetScanIndicator();
+    document.querySelectorAll("button").forEach(btn => {
+      btn.classList.remove("border-4", "border-black");
+    });
+    if (event) event.target.classList.add("border-4", "border-black");
+
+    roomStatusElement.textContent = 'LOADING...';
+    roomStatusElement.style.color = 'gray';
+
+    const [{ data: originalData, error: originalError }, { data: manualData, error: manualError }] = await Promise.all([
+      supabaseClient.from('schedules_originalv2').select('*').eq('room', room).order('start_time', { ascending: true }),
+      supabaseClient.from('schedules_manualv2').select('*').eq('room', room).order('start_time', { ascending: true })
+    ]);
+
+    if (originalError || manualError) {
+      console.error('Error fetching schedules:', originalError || manualError);
+      roomStatusElement.textContent = 'Error loading schedule';
+      roomStatusElement.style.color = 'red';
+      return;
+    }
+
+    const mergedSchedules = [...originalData, ...manualData];
+    const schedulesToShow = room === '315' ? mergedSchedules : mergedSchedules.filter(s => s.start_time && s.end_time);
+    const scheduleContainer = document.getElementById("schedule-container");
+
+    if (schedulesToShow.length === 0) {
+      scheduleContainer.innerHTML = `
+        <tr>
+          <td colspan="5" class="px-4 py-2 text-center text-gray-500">
+            No schedule found for this room.
+          </td>
+        </tr>`;
+    } else {
+scheduleContainer.innerHTML = schedulesToShow.map(schedule => {
+  let timeDisplay = 'Need to scan first';
+  if (room === '315') {
+    if (schedule.start_time && schedule.end_time) {
+      const startTime = new Date(schedule.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+      const endTime = new Date(schedule.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+      timeDisplay = `${startTime} - ${endTime}`;
+    }
+  } else {
+    const startTime = schedule.start_time ? new Date(schedule.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : 'TBD';
+    const endTime = schedule.end_time ? new Date(schedule.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : 'TBD';
+    timeDisplay = `${startTime} - ${endTime}`;
+  }
+
+  const date = new Date(schedule.date).toLocaleDateString();
+  return `
+    <tr>
+      <td class="px-4 py-2 border">${date}</td>
+      <td class="px-4 py-2 border">${timeDisplay}</td>
+      <td class="px-4 py-2 border">${schedule.subject}</td>
+      <td class="px-4 py-2 border">${schedule.prof}</td>
+      <td class="px-4 py-2 border">${schedule.section}</td>
+    </tr>`;
+}).join('');
+    }
+
+    const now = new Date();
+    const localNow = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Manila' }));
+    const nowMs = localNow.getTime();
+
+    const filterActiveSchedules = (schedules) => {
+      if (room === '315') {
+        return schedules.filter(s => {
+          if (!s.start_time || !s.end_time) return true;
+          const start = new Date(s.start_time).getTime();
+          const end = new Date(s.end_time).getTime();
+          return start <= nowMs && nowMs <= end;
+        });
+      } else {
+        return schedules.filter(s => {
+          if (!s.start_time || !s.end_time) return false;
+          const start = new Date(s.start_time).getTime();
+          const end = new Date(s.end_time).getTime();
+          return start <= nowMs && nowMs <= end;
+        });
+      }
+    }
+    ;
+
+    const originalNow = filterActiveSchedules(originalData).filter(s => s.room === room);
+    const manualNow = filterActiveSchedules(manualData).filter(s => s.room === room);
+    const allCurrent = [...manualNow, ...originalNow];
+    const override = manualOverrides[room] || 'auto';
+
+    if (override === 'leave') {
+      updateRoomDisplay('AVAILABLE 📘', 'green', room, null);
+    } else if (override === 'enter') {
+      updateRoomDisplay('OCCUPIED', 'red', room, null);
+    } else {
+      const originalConflict = checkConflictWithDetails(originalNow);
+      const manualConflict = checkConflictWithDetails(manualNow);
+      const bothHave = originalNow.length > 0 && manualNow.length > 0;
+      const bothMatch = allOverlappingSchedulesMatch(originalNow, manualNow);
+
+      if (originalConflict === 'yellow' || manualConflict === 'yellow') {
+        updateRoomDisplay('CONFLICT ⚠️', 'yellow', room, allCurrent[0]);
+      } else if (originalConflict === 'red' || manualConflict === 'red') {
+        updateRoomDisplay('OCCUPIED', 'red', room, allCurrent[0]);
+      } else if (bothHave && !bothMatch) {
+        updateRoomDisplay('CONFLICT ⚠️', 'yellow', room, allCurrent[0]);
+      } else if (bothHave && bothMatch) {
+        updateRoomDisplay('OCCUPIED', 'red', room, allCurrent[0]);
+      } else if (allCurrent.length > 0) {
+        updateRoomDisplay('OCCUPIED', 'red', room, allCurrent[0]);
+      } else {
+        updateRoomDisplay('AVAILABLE', 'green', room, null);
+      }
+    }
+
+function updateRoomDisplay(status, color, room, schedule = null) {
+  if (room === '315') {
+    const systemStatus = document.getElementById("overall-status").textContent.trim().toUpperCase();
+    const hasSchedule = schedule !== null;
+    const sensorsOn = systemStatus.includes("ON");
+
+    // Priority 1: Manual override
+    const override = manualOverrides[room] || 'auto';
+    if (override === 'leave') {
+      status = 'AVAILABLE';
+      color = 'green';
+    } else if (override === 'enter') {
+      status = 'OCCUPIED (MANUAL)';
+      color = 'red';
+    }
+    // Priority 2: Both schedule and sensors active
+    else if (hasSchedule && sensorsOn) {
+      status = 'OCCUPIED (SCHEDULE + SENSORS)';
+      color = 'red';
+    }
+    // Priority 3: Schedule exists (regardless of sensors)
+    else if (hasSchedule) {
+      status = 'OCCUPIED (SCHEDULED)';
+      color = 'red';
+    }
+    // Priority 4: Sensors active without schedule
+    else if (sensorsOn) {
+      status = 'OCCUPIED (SENSORS)';
+      color = 'red';
+    }
+    // Default available state
+    else {
+      status = 'AVAILABLE';
+      color = 'green';
+    }
+  }
+
+  // Update display elements
+  roomStatusElement.textContent = status;
+  roomStatusElement.style.color = color;
+  roomNoElement.textContent = `ROOM ${room}`;
+  roomTypeElement.textContent = schedule?.subject || 'N/A';
+  roomScheduleElement.textContent = schedule ? 
+    (room === '315' && (!schedule.start_time || !schedule.end_time) ? 
+      'Scan required to activate' : 
+      `${formatTimeTo12Hour(schedule.start_time)} - ${formatTimeTo12Hour(schedule.end_time)}, ${new Date(schedule.date).toLocaleDateString()}`) 
+    : 'N/A';
+  occupiedByElement.textContent = schedule?.section || 'N/A';
+  instructorElement.textContent = schedule?.prof || 'N/A';
+}
+
+    function resetScanIndicator() {
+      scanIndicator.className = 'w-3 h-3 rounded-full bg-gray-400 inline-block';
+      scanLabel.textContent = 'No scan';
+    }
+  }
+
+  function formatTimeTo12Hour(timeString) {
+    const date = new Date(timeString);
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${hours}:${minutes} ${ampm}`;
+  }
+
+   // Modified updateAllRoomButtons function
+async function updateAllRoomButtons() {
+    const roomNumbers = ['300','302', '310', '311', '312', '313', '314', '315', '316'];
+    const now = new Date();
+    const localNow = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Manila' }));
+    const nowMs = localNow.getTime();
+    const today = new Date(localNow);
+    today.setHours(0,0,0,0); // Start of today
+
+    const [{ data: originalData, error: originalError }, { data: manualData, error: manualError }] = await Promise.all([
+        supabaseClient.from('schedules_originalv2').select('*'),
+        supabaseClient.from('schedules_manualv2').select('*')
+    ]);
+
+    if (originalError || manualError) {
+        console.error('Failed to fetch schedule data:', originalError || manualError);
+        return;
+    }
+
+    roomNumbers.forEach(room => {
+        const button = document.querySelector(`button[onclick*="'${room}'"]`);
+        if (!button) return;
+
+        // Convert to string comparison to match TEXT column type
+        const originalSchedules = originalData.filter(s => String(s.room) === String(room));
+        const manualSchedules = manualData.filter(s => String(s.room) === String(room));
+
+        button.classList.remove('bg-green-500', 'bg-red-500', 'bg-yellow-500');
+
+        // Special handling for Room 315 (date-based only)
+function hasConflictingSchedules(original, manual) {
+  // Compare all relevant fields except time
+  return original.some(o => 
+    manual.some(m => 
+      o.room !== m.room ||
+      o.date !== m.date ||
+      o.section !== m.section ||
+      o.subject !== m.subject ||
+      o.prof !== m.prof ||
+      o.representative !== m.representative
+    )
+  );
+}
+
+// Modified Room 315 section in updateAllRoomButtons
+if (room === '315') {
+    // Filter schedules for today
+    const todayOriginal = originalSchedules.filter(s => 
+        new Date(s.date) >= today
+    );
+    const todayManual = manualSchedules.filter(s => 
+        new Date(s.date) >= today
+    );
+
+    const hasOriginal = todayOriginal.length > 0;
+    const hasManual = todayManual.length > 0;
+
+    console.log('Room 315 Schedules:', {
+        original: todayOriginal,
+        manual: todayManual
+    });
+
+    if (hasOriginal && hasManual) {
+        // Check if any schedule pair has conflicting details
+        const hasConflicts = hasConflictingSchedules(todayOriginal, todayManual);
+        
+        if (hasConflicts) {
+            button.classList.add('bg-yellow-500');
+            console.log('315: Conflicting schedules - YELLOW');
+        } else {
+            button.classList.add('bg-red-500');
+            console.log('315: Matching schedules - RED');
+        }
+    } else if (hasOriginal || hasManual) {
+        button.classList.add('bg-red-500');
+        console.log('315: Single schedule type - RED');
+    } else {
+        // Fallback to sensor status
+        const systemStatus = document.getElementById("overall-status").textContent.trim();
+        button.classList.add(systemStatus.includes("ON") ? 'bg-red-500' : 'bg-green-500');
+        console.log('315: No schedules - Sensor based');
+    }
+    return;
+}
+
+        // Existing logic for other rooms (time-based)
+        const currentOriginal = findOverlappingNow(originalSchedules, nowMs);
+        const currentManual = findOverlappingNow(manualSchedules, nowMs);
+        const totalCurrent = [...currentOriginal, ...currentManual];
+
+        const originalConflict = checkConflictWithDetails(currentOriginal);
+        const manualConflict = checkConflictWithDetails(currentManual);
+        const bothHave = currentOriginal.length > 0 && currentManual.length > 0;
+        const bothMatch = allOverlappingSchedulesMatch(currentOriginal, currentManual);
+
+        if (originalConflict === 'yellow' || manualConflict === 'yellow') {
+            button.classList.add('bg-yellow-500');
+        } else if (originalConflict === 'red' || manualConflict === 'red') {
+            button.classList.add('bg-red-500');
+        } else if (bothHave && !bothMatch) {
+            button.classList.add('bg-yellow-500');
+        } else if (bothHave && bothMatch) {
+            button.classList.add('bg-red-500');
+        } else if (totalCurrent.length > 0) {
+            button.classList.add('bg-red-500');
+        } else {
+            button.classList.add('bg-green-500');
+        }
+    });
+}
+
+  // Modified checkConflictWithDetails for Room 315
+  function checkConflictWithDetails(schedules) {
+    for (let i = 0; i < schedules.length; i++) {
+      for (let j = i + 1; j < schedules.length; j++) {
+        const a = schedules[i];
+        const b = schedules[j];
+        
+        // Special conflict detection for Room 315
+        if (currentRoom === '315') {
+          // Check if there are both original and manual schedules
+          const hasOriginal = originalData.length > 0;
+          const hasManual = manualData.length > 0;
+          if (hasOriginal && hasManual) {
+            return 'yellow';
+          }
+        }
+        // Original time-based conflict check for other rooms
+        else {
+          const aStart = new Date(a.start_time).getTime();
+          const aEnd = new Date(a.end_time).getTime();
+          const bStart = new Date(b.start_time).getTime();
+          const bEnd = new Date(b.end_time).getTime();
+          const isOverlap = aStart < bEnd && bStart < aEnd;
+
+          if (isOverlap) {
+            return schedulesMatch(a, b) ? 'red' : 'yellow';
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  function schedulesMatch(s1, s2) {
+    return (
+      s1.subject === s2.subject &&
+      s1.prof === s2.prof &&
+      s1.section === s2.section &&
+      new Date(s1.start_time).getTime() === new Date(s2.start_time).getTime() &&
+      new Date(s1.end_time).getTime() === new Date(s2.end_time).getTime()
+    );
+  }
+
+  function findOverlappingNow(schedules, nowMs) {
+    return schedules.filter(s => {
+      const start = new Date(s.start_time).getTime();
+      const end = new Date(s.end_time).getTime();
+      return start <= nowMs && nowMs <= end;
+    });
+  }
+
+  function allOverlappingSchedulesMatch(originalNow, manualNow) {
+    if (originalNow.length === 0 || manualNow.length === 0) return false;
+    return manualNow.every(manual =>
+      originalNow.some(original => schedulesMatch(original, manual))
+    );
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    updateAllRoomButtons();
+    setInterval(updateAllRoomButtons, 60000);
+    handleRoomClick('300');
+  });
+
+  // Schedule management functions
+  const SUPABASE_URL = 'https://vzubmycafgnjtwnjfpop.supabase.co';
+  const SUPABASE_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6dWJteWNhZmduanR3bmpmcG9wIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NDM0NjY1NCwiZXhwIjoyMDU5OTIyNjU0fQ.c7xkLWthN-SHSjJjs22CDy45MvfEFGxH7A-JD4aOSxI';
+  const TABLE_NAME = 'schedules_manualv2';
+
+  function openModal() {
+    document.getElementById("modal").classList.remove("hidden");
+  }
+
+  function closeModal() {
+    document.getElementById("modal").classList.add("hidden");
+    document.getElementById("scheduleForm").reset();
+  }
+
+  let currentSchedule = null;
+
+  function editSchedule(schedule) {
+    currentSchedule = schedule;
+    document.getElementById("room").value = schedule.room;
+    document.getElementById("date").value = schedule.date;
+    document.getElementById("academicYear").value = schedule.academicYear || "";
+    document.getElementById("semester").value = schedule.semester || "";
+    document.getElementById("startTime").value = schedule.start_time ? new Date(schedule.start_time).toLocaleTimeString() : "";
+    document.getElementById("endTime").value = schedule.end_time ? new Date(schedule.end_time).toLocaleTimeString() : "";
+    document.getElementById("section").value = schedule.section;
+    document.getElementById("subject").value = schedule.subject;
+    document.getElementById("prof").value = schedule.prof;
+    openModal('Edit');
+  }
+
+  async function saveSchedule(event) {
+    event?.preventDefault?.();
+    let room = document.getElementById("room").value.trim();
+    let date = document.getElementById("date").value.trim();
+    let academicYear = document.getElementById("academicYear").value.trim();
+    let semester = document.getElementById("semester").value.trim();
+    let startTime = document.getElementById("startTime").value.trim();
+    let endTime = document.getElementById("endTime").value.trim();
+    let yearLevel = document.getElementById("yearLevel").value.trim();
+    let section = document.getElementById("section").value.trim();
+    let combinedSection = `${yearLevel}-${section}`;
+    let subject = document.getElementById("subject").value.trim();
+    let prof = document.getElementById("prof").value.trim();
+    if (prof === "Others") {
+      prof = document.getElementById("customProf").value.trim();
+    }
+
+    if (!room || !date || !academicYear || !semester || !combinedSection || !subject || !prof) {
+      alert("Please fill in all required fields before saving.");
+      return;
+    }
+
+    const startDateTime = startTime ? new Date(`${date}T${startTime}`).toISOString() : null;
+    const endDateTime = endTime ? new Date(`${date}T${endTime}`).toISOString() : null;
+    const submitButton = document.getElementById("submitButton");
+    if (submitButton) submitButton.disabled = true;
+
+    try {
+      const isEditing = currentSchedule !== null;
+      const method = isEditing ? 'PATCH' : 'POST';
+      const url = isEditing
+        ? `${SUPABASE_URL}/rest/v1/${TABLE_NAME}?id=eq.${currentSchedule.id}`
+        : `${SUPABASE_URL}/rest/v1/${TABLE_NAME}`;
+
+      const dataToSend = {
+        room,
+        date,
+        academicYear,
+        semester,
+        section: combinedSection,
+        subject,
+        prof
+      };
+
+      if (startDateTime) dataToSend.start_time = startDateTime;
+      else dataToSend.start_time = null;
+
+      if (endDateTime) dataToSend.end_time = endDateTime;
+      else dataToSend.end_time = null;
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_API_KEY,
+          'Authorization': `Bearer ${SUPABASE_API_KEY}`,
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(dataToSend)
+      });
+
+      if (!response.ok) throw new Error(await response.text());
+
+      alert(isEditing ? "Schedule updated!" : "Schedule saved!");
+      closeModal();
+      currentSchedule = null;
+
+      if (currentRoom) await updateRoomStatus(currentRoom);
+    } catch (err) {
+      console.error("Save error:", err.message);
+      alert("Failed: " + err.message);
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
+  }
+
+
+  function leaveRoom() {
+    if (!currentRoom) {
+      alert("Please select a room first.");
+      return;
+    }
+    alert("Leave Room clicked for Room " + currentRoom);
+    currentRoom = null;
+    document.getElementById("add-schedule-btn").disabled = true;
+    document.getElementById("toggle-schedule-view").disabled = true;
+    document.getElementById('save-manual-schedule-btn').disabled = true;
+    document.getElementById('save-original-schedule-btn').disabled = true;
+
+    document.querySelectorAll(".toggle-button").forEach(btn => {
+      btn.classList.remove("border-4", "border-black");
+    });
+
+    resetRoomDetailsPanel();
+  }
+
+  function resetRoomDetailsPanel() {
+    document.getElementById("room-status").textContent = "UNKNOWN";
+    document.getElementById("room-status").style.color = "";
+    document.getElementById("room-no").textContent = "N/A";
+    document.getElementById("occupied-by").textContent = "N/A";
+    document.getElementById("room-type-details").textContent = "N/A";
+    document.getElementById("room-schedule").textContent = "N/A";
+    document.getElementById("instructor").textContent = "N/A";
+    document.getElementById("scan-indicator").className =
+      "w-3 h-3 rounded-full bg-gray-400 inline-block";
+    document.getElementById("scan-label").textContent = "No scan";
+  }
+
+  function openModalForAddSchedule() {
+    if (!currentRoom) {
+      alert("Please select a room first.");
+      return;
+    }
+    document.getElementById("modal").classList.remove("hidden");
+    document.getElementById("room").value = currentRoom;
+  }
+
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const SUPABASE_URL = 'https://vzubmycafgnjtwnjfpop.supabase.co';
+  const SUPABASE_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6dWJteWNhZmduanR3bmpmcG9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQzNDY2NTQsImV4cCI6MjA1OTkyMjY1NH0.fDzlvR0xT3Sm8BTlCnEbxC8WE8-H3ZBRxA9SeEViaeo'; // shortened for safety
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_API_KEY);
+
+  async function fetchAndRenderCombinedData() {
+    const [res1, res2] = await Promise.all([
+      client.from('comp_data').select('*').order('created_at', { ascending: false }).limit(1),
+      client.from('comp_data2').select('*').order('created_at', { ascending: false }).limit(1),
+    ]);
+
+    if (!res1.data.length && !res2.data.length) return;
+
+    const d1 = res1.data[0] || {};
+    const d2 = res2.data[0] || {};
+
+    const combined = {
+      temperature: Math.min(d1.temperature ?? 100, d2.temperature ?? 100),
+      humidity: Math.max(d1.humidity ?? 0, d2.humidity ?? 0),
+      light: Math.max(d1.light ?? 0, d2.light ?? 0),
+      motion: (d1.motion === 1 || d2.motion === 1) ? 1 : 0,
+      created_at: new Date(Math.max(new Date(d1.created_at || 0), new Date(d2.created_at || 0)))
+    };
+
+    document.getElementById("temperatureCombined").textContent = `Temperature: ${combined.temperature.toFixed(1)} °C`;
+    document.getElementById("humidity2").textContent = `Humidity: ${combined.humidity.toFixed(1)} %`;
+    document.getElementById("light2").textContent = `Light: ${combined.light}`;
+    document.getElementById("timestampsCombined").textContent = `Timestamp: ${combined.created_at.toLocaleString()}`;
+
+    document.getElementById("temperature-combined").textContent = `Aircon Status: ${combined.temperature < 33 ? 'On' : 'Off'}`;
+    document.getElementById("light-status-combined").textContent = `Light Status: ${combined.light > 50 ? 'On' : 'Off'}`;
+    document.getElementById("motion-combined-status").textContent = `Motion Status: ${combined.motion === 1 ? 'Motion Detected' : 'No Motion'}`;
+
+    const isOn = combined.temperature < 33 || combined.light > 50 || combined.motion === 1;
+    const overallStatus = document.getElementById("overall-status");
+    overallStatus.textContent = `Status: ${isOn ? 'ON' : 'OFF'}`;
+    overallStatus.className = `text-2xl font-bold text-center ${isOn ? 'text-green-600' : 'text-red-600'}`;
+
+    const listElement = document.getElementById('status-list');
+    listElement.innerHTML = '';
+    const statusList = [
+      `Temperature: ${combined.temperature < 33 ? 'ON' : 'OFF'}`,
+      `Light: ${combined.light > 50 ? 'ON' : 'OFF'}`,
+      `Motion: ${combined.motion === 1 ? 'DETECTED' : 'NONE'}`
+    ];
+    statusList.forEach((line) => {
+      const li = document.createElement('li');
+      li.textContent = line;
+      li.className = line.includes('ON') || line.includes('DETECTED') ? 'text-green-600 font-semibold' : 'text-gray-500';
+      listElement.appendChild(li);
+    });
+  }
+
+  await fetchAndRenderCombinedData();
+});
+</script>
+<script>
+  const overallStatusElement = document.getElementById("overall-status");
+  const roomStatusElement = document.getElementById("room-status");
+
+  // Observer to watch for changes in overall system status
+  const observer = new MutationObserver(() => {
+    if (currentRoom === "315") {
+      const systemStatus = overallStatusElement.textContent.trim().toUpperCase();
+      if (systemStatus.includes("ON")) {
+        roomStatusElement.textContent = "Occupied";
+      } else if (systemStatus.includes("OFF")) {
+        roomStatusElement.textContent = "Available";
+      } else {
+        roomStatusElement.textContent = "Unknown";
+      }
+    }
+  });
+
+  // Start observing changes to the overall system status
+  if (overallStatusElement) {
+    observer.observe(overallStatusElement, { childList: true, subtree: true });
+  }
+</script>
+</body>
+</html>
+
+
+

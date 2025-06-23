@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Profile</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="index.js" defer></script>
+  <script src="https://kit.fontawesome.com/0d66da6825.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800">
+
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="fixed h-full bg-orange-600 w-16 hover:w-52 group transition-all duration-300 z-10">
+      <div class="flex flex-col h-full">
+        <a href="#" class="flex items-center p-4 border-b border-white">
+          <img src="/images/CpELogo.jpg" alt="Logo" class="w-8 h-8 rounded-full object-cover"/>
+          <span class="ml-3 text-lg font-semibold text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+            CpE Department
+          </span>
+        </a>
+        <ul class="flex flex-col mt-4 space-y-2">
+          <li>
+            <a href="./profile.html" class="flex items-center px-4 py-2 text-white hover:bg-orange-500 transition-all duration-200">
+              <i class="fas fa-user text-2xl"></i>
+              <span class="ml-3 text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Profile</span>
+            </a>
+          </li>
+          <li>
+            <a href="./index.html" class="flex items-center px-4 py-2 text-white hover:bg-orange-500 transition-all duration-200">
+              <i class="fas fa-home text-2xl"></i>
+              <span class="ml-3 text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="./RoomManual.html" class="flex items-center px-4 py-2 text-white hover:bg-orange-500 transition-all duration-200">
+              <i class="fas fa-th-large text-2xl"></i>
+              <span class="ml-3 text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Rooms</span>
+            </a>
+          </li>
+          <li>
+            <a href="./SchedOriginal.html" class="flex items-center px-4 py-2 text-white hover:bg-orange-500 transition-all duration-200">
+              <i class="fas fa-calendar-alt text-2xl"></i>
+              <span class="ml-3 text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Schedule</span>
+            </a>
+          </li>
+          <li>
+            <a href="./logs.html" class="flex items-center px-4 py-2 text-white hover:bg-orange-500 transition-all duration-200">
+              <i class="fas fa-file-alt text-2xl"></i>
+              <span class="ml-3 text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Logs</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-16 group-hover:ml-52 transition-all duration-300 flex-1 p-8">
+      <div class="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-8">
+        <div class="flex items-center space-x-6 mb-6">
+          <div id="userInitials" class="w-16 h-16 bg-orange-500 text-white flex items-center justify-center rounded-full text-xl font-bold">
+            AD
+          </div>
+          <div>
+            <h2 id="userName" class="text-2xl font-semibold">Admin User</h2>
+            <p id="userEmail" class="text-sm text-gray-600">admin@example.com</p>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex justify-between border-b pb-2">
+            <span class="text-gray-600 font-medium">Role</span>
+            <span class="text-gray-800 font-semibold">Administrator</span>
+          </div>
+          <div class="flex justify-between border-b pb-2">
+            <span class="text-gray-600 font-medium">Last Login</span>
+            <span id="lastLogin" class="text-gray-800">Loading...</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600 font-medium">Account Created</span>
+            <span id="accountCreated" class="text-gray-800">Loading...</span>
+          </div>
+        </div>
+
+        <div class="mt-8 text-right">
+          <button id="logoutBtn" class="px-5 py-2 bg-red-500 hover:bg-red-600 text-white rounded shadow-sm transition">
+            Logout
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

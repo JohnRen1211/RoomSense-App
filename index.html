@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>ROOM DASHBOARD</title>
+		<link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+		<script src="https://kit.fontawesome.com/0d66da6825.js" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+	</head>
+	<body class="font-sans bg-gray-100 text-gray-700 overflow-auto" >
+		<div class="flex h-screen">
+			<!-- Sidebar -->
+    <aside class="fixed h-full bg-orange-600 w-16 hover:w-52 group transition-all duration-300 z-10">
+      <div class="flex flex-col h-full">
+        <a href="#" class="flex items-center p-4 border-b border-white">
+          <img src="/images/CpELogo.jpg" alt="Logo" class="w-8 h-8 rounded-full object-cover"/>
+          <span class="ml-3 text-lg font-semibold text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+            CpE Department
+          </span>
+        </a>
+        <ul class="flex flex-col mt-4 space-y-2">
+          <li>
+            <a href="./profile.html" class="flex items-center px-4 py-2 text-white hover:bg-orange-500 transition-all duration-200">
+              <i class="fas fa-user text-2xl"></i>
+              <span class="ml-3 text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Profile</span>
+            </a>
+          </li>
+          <li>
+            <a href="./index.html" class="flex items-center px-4 py-2 text-white hover:bg-orange-500 transition-all duration-200">
+              <i class="fas fa-home text-2xl"></i>
+              <span class="ml-3 text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="./RoomManual.html" class="flex items-center px-4 py-2 text-white hover:bg-orange-500 transition-all duration-200">
+              <i class="fas fa-th-large text-2xl"></i>
+              <span class="ml-3 text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Rooms</span>
+            </a>
+          </li>
+          <li>
+            <a href="./SchedOriginal.html" class="flex items-center px-4 py-2 text-white hover:bg-orange-500 transition-all duration-200">
+              <i class="fas fa-calendar-alt text-2xl"></i>
+              <span class="ml-3 text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Schedule</span>
+            </a>
+          </li>
+          <li>
+            <a href="./logs.html" class="flex items-center px-4 py-2 text-white hover:bg-orange-500 transition-all duration-200">
+              <i class="fas fa-file-alt text-2xl"></i>
+              <span class="ml-3 text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Logs</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+			<!--BOXES-->
+			<div class="flex-1 ml-16 p-6">
+				<h1 class="text-3xl font-bold text-orange-600 mb-2">Dashboard</h1>
+				<div class="grid grid-cols-2 gap-4 mb-6">
+					<!-- Left: Room Layout -->
+					<div class="bg-white p-5 rounded-lg shadow-lg flex-col">
+						<h2 class="text-2xl text-orange-600 font-bold mb-3 ml-2">
+							CPE Room Layout
+						</h2>
+            <div class="flex justify-center mb-4">
+                <div class="grid grid-cols-9 grid-rows-6 gap-0 bg-gray-100">
+                    <!-- Two big squares -->
+                    <div class="col-span-2 row-span-2 col-start-3 row-start-3 bg-white outline outline-2 outline-orange-400 p-2 px-5"></div>
+                    <div class="col-span-2 row-span-2 col-start-6 row-start-3 bg-white outline outline-2 outline-orange-400 p-2 px-5"></div>
+
+                    <!-- Non-CPE Rooms -->
+                    <div class="col-start-1 row-start-1 mr-1 p-2 px-5 relative">
+                        <div class="absolute inset-x-0 bottom-0 h-7 bg-white outline outline-2 outline-orange-400"></div>
+                    </div>
+                    
+                    <div class="col-start-1 row-start-2 mt-1 mr-1 p-2 px-5 relative">
+                        <div class="absolute inset-y-0 left-0 w-8 bg-white outline outline-2 outline-orange-400"></div>
+                    </div>
+                    <div class="col-start-1 row-start-4 bg-orange-200 outline outline-2 outline-orange-400 text-white text-center mr-1 mt-1 p-2 px-5"></div>
+                    <div class="col-start-1 row-start-5 mt-1 mr-1 p-2 px-5 relative">
+                        <div class="absolute inset-y-0 left-0 w-8 bg-white outline outline-2 outline-orange-400"></div>
+                    </div>
+                    <div class="col-start-1 row-start-6 mt-1 mr-1 p-2 px-5 relative">
+                        <div class="absolute inset-x-0 top-0 h-7 bg-white outline outline-2 outline-orange-400"></div>
+                    </div>
+
+                    <div class="col-start-9 row-start-1 p-2 px-5 relative">
+                        <div class="absolute inset-x-0 bottom-0 h-7 bg-white outline outline-2 outline-orange-400"></div>
+                    </div>
+                    <div class="col-start-9 row-start-2 mt-1 p-2 px-5 relative">
+                        <div class="absolute inset-y-0 right-0 w-8 bg-white outline outline-2 outline-orange-400"></div>
+                    </div>
+                    <div class="col-start-9 row-start-3 bg-white outline outline-2 outline-orange-400 mt-1 p-2 px-5"></div>
+                    <div class="col-start-9 row-start-4 bg-white outline outline-2 outline-orange-400 mt-1 p-2 px-5"></div>
+                    <div class="col-start-9 row-start-5 mt-1 p-2 px-5 relative">
+                        <div class="absolute inset-y-0 right-0 w-8 bg-white outline outline-2 outline-orange-400"></div>
+                    </div>
+                    <div class="col-start-9 row-start-6 mt-1 p-2 px-5 relative">
+                        <div class="absolute inset-x-0 top-0 h-7 bg-white outline outline-2 outline-orange-400"></div>
+                    </div>
+
+
+                    <div class="col-start-3 row-start-6 bg-white outline outline-2 outline-orange-400 mr-1 mt-1 p-2 px-5"></div>
+                    <div class="col-start-4 row-start-6 bg-white outline outline-2 outline-orange-400 mr-1 mt-1 p-2 px-5"></div>
+                    <div class="col-start-5 row-start-6 bg-white outline outline-2 outline-orange-400 mr-1 mt-1 p-2 px-5"></div>
+                    <div class="col-start-6 row-start-6 bg-white outline outline-2 outline-orange-400 mr-1 mt-1 p-2 px-5"></div>
+                    <div class="col-start-7 row-start-6 bg-white outline outline-2 outline-orange-400 mr-1 mt-1 p-2 px-5"></div>
+                    <div class="col-start-8 row-start-6 bg-white outline outline-2 outline-orange-400 mr-1 mt-1 p-2 px-5"></div>
+
+                    <!-- Room Buttons -->
+                    <button class="toggle-button bg-green-500 outline outline-2 outline-orange-400 hover:outline-amber-800 mr-1 text-white text-center p-2 px-5" onclick="roomClicked('316', event)" type="button" id="room-btn-316">316</button>
+                    <button class="toggle-button bg-green-500 outline outline-2 outline-orange-400 hover:outline-amber-800  mr-1 text-white text-center p-2 px-5" onclick="roomClicked('315', event)" type="button" id="room-btn-315">315</button>
+                    <button class="toggle-button bg-green-500 outline outline-2 outline-orange-400 hover:outline-amber-800  mr-1 text-white text-center p-2 px-5" onclick="roomClicked('314', event)" type="button" id="room-btn-314">314</button>
+                    <button class="toggle-button bg-green-500 outline outline-2 outline-orange-400 hover:outline-amber-800  mr-1 text-white text-center p-2 px-5" onclick="roomClicked('313', event)" type="button" id="room-btn-313">313</button>
+                    <button class="toggle-button bg-green-500 outline outline-2 outline-orange-400 hover:outline-amber-800  mr-1 text-white text-center p-2 px-5" onclick="roomClicked('312', event)" type="button" id="room-btn-312">312</button>
+                    <button class="toggle-button bg-green-500 outline outline-2 outline-orange-400 hover:outline-amber-800  mr-1 text-white text-center p-2 px-5" onclick="roomClicked('311', event)" type="button" id="room-btn-311">311</button>
+                    <button class="toggle-button bg-green-500 outline outline-2 outline-orange-400 hover:outline-amber-800  mr-1 text-white text-center p-2 px-5" onclick="roomClicked('310', event)" type="button" id="room-btn-310">310</button>
+                    <button class="toggle-button col-start-2 row-start-6 bg-green-500 outline outline-2 outline-orange-400 hover:outline-amber-800 mr-1 text-white text-center p-2 px-5" onclick="roomClicked('302', event)" type="button" id="room-btn-302">302</button>
+                    <button class="toggle-button col-start-1 row-start-3 bg-green-500 outline outline-2 outline-orange-400  hover:outline-amber-800  mr-1 mt-1 text-white text-center p-2 px-5" onclick="roomClicked('300', event)" type="button" id="room-btn-300">300</button>
+                </div>
+            </div>
+
+						<div class="text-center text-sm text-gray-400">
+							Select area to view room details
+						</div>
+						<div class="flex justify-center mt-2">
+							<div class="flex items-center space-x-2">
+								<div class="bg-green-500 w-4 h-4 rounded"></div>
+								<div class="text-sm text-gray-500">Vacant</div>
+							</div>
+							<div class="flex items-center space-x-2 ml-4">
+								<div class="bg-red-500 w-4 h-4 rounded"></div>
+								<div class="text-sm text-gray-500">Occupied</div>
+							</div>
+							<div class="flex items-center space-x-2 ml-4">
+								<div class="bg-yellow-500 w-4 h-4 rounded"></div>
+								<div class="text-sm text-gray-500">Unscheduled</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Right: Room Description -->
+					<div class="bg-white shadow-md rounded-lg p-6 flex flex-col" id="room-details-panel">
+						<h2 class="text-xl text-orange-500 font-bold mb-4">Room Details</h2>
+						<div class="space-y-4 flex-grow">
+							<div class="flex justify-between">
+								<span class="font-medium">Room Status</span>
+								<span id="room-status" class="font-bold text-gray-800">UNKNOWN</span>
+							</div>
+							<div class="flex justify-between">
+								<span class="font-medium">Room Number</span>
+								<span id="room-no" class="font-semibold">N/A</span>
+							</div>
+							<div class="flex justify-between">
+								<span class="font-medium">Section</span>
+								<span id="occupied-by" class="font-semibold">N/A</span>
+							</div>
+							<div class="flex justify-between">
+								<span class="font-medium">Subject</span>
+								<span id="room-type-details" class="font-semibold">N/A</span>
+							</div>
+							<div class="flex justify-between">
+								<span class="font-medium">Professor</span>
+								<span id="instructor" class="font-semibold">N/A</span>
+							</div>
+              	<div class="flex justify-between">
+								<span class="font-medium">Representative</span>
+								<span id="representative-details" class="font-semibold">N/A</span>
+							</div>
+							<div class="flex justify-between">
+								<span class="font-medium">Schedule</span>
+								<span id="room-schedule" class="font-semibold">N/A</span>
+							</div>
+							<div class="flex justify-between items-start">
+								<div class="font-medium flex flex-col">
+									<span>Scanned In</span>
+									<span class="text-xs text-gray-500">*Only available in Room 315</span>
+								</div>
+								<span id="scan-status" class="font-semibold flex items-center gap-2">
+									<span id="scan-indicator" class="w-3 h-3 rounded-full bg-gray-400 inline-block"></span>
+									<span id="scan-label">No scan</span>
+								</span>
+							</div>
+						</div>
+
+						<!-- Buttons: Add Schedule and Leave Room -->
+<div class="flex justify-center gap-x-4 mt-4"> 
+<button class="bg-red-500 text-white w-40 py-2 rounded focus:outline-none hover:bg-red-800 transition disabled:opacity-50 disabled:cursor-not-allowed" 
+onclick="openModalForAddSchedule()" id="add-schedule-btn" disabled> Enter Room </button>
+<button id="toggle-schedule-view" class="bg-green-500 text-white w-40 py-2 rounded focus:outline-none hover:bg-green-800 transition disabled:opacity-50 disabled:cursor-not-allowed" 
+onclick="leaveRoom()" disabled> Leave Room </button>
+</div>
+
+					</div>
+					<!-- BOTTOM SECTION -->
+					<!-- Left: Put schedules of room here depending which room is clicked -->
+					<div class="w-full bg-white p-6 rounded-lg shadow-lg flex-col">
+						<h2 class="text-2xl font-bold text-orange-600 mb-2">Room Schedule</h2>
+                        <div class="max-h-64 overflow-y-auto">
+                            <table id="schedule-table" class="min-w-full bg-white border border-gray-200">
+							<thead>
+								<tr>
+									<th class="px-4 py-2 border">Date</th>
+									<th class="px-4 py-2 border">Time</th>
+									<th class="px-4 py-2 border">Subject</th>
+									<th class="px-4 py-2 border">Professor</th>
+									<th class="px-4 py-2 border">Section</th>
+                  <th class="px-4 py-2 border">Type</th>
+								</tr>
+							</thead>
+							<tbody id="schedule-container">
+								<!-- Schedule will be populated here dynamically -->
+								<tr>
+									<td colspan="6" class="px-4 py-2 text-center text-gray-500">No schedule found.</td>
+								</tr>
+							</tbody>
+						</table>
+                        </div>
+					</div>
+
+		  <!-- Right: Sensor Details -->
+		  <div class="bg-white p-6 rounded-lg shadow-lg flex-col">
+           <!-- Sensor Details -->
+  <!-- Combined Sensor Box -->
+  <div class="w-full">
+    <div class="bg-white shadow-md rounded-lg p-3 w-full">
+      <h2 class="text-lg text-orange-500 font-bold mb-3">Combined Sensor Details</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+        <!-- Temperature -->
+        <div class="bg-white p-3 rounded-lg shadow flex flex-col w-full">
+          <div class="flex items-center gap-2 mb-2 border-b border-gray-300 pb-1">
+            <div class="text-sm sm:text-base text-orange-500 font-bold" id="temperature-combined">Aircon Status: --</div>
+            <div class="text-sm sm:text-base text-orange-500 font-bold hidden" id="temperatureCombined">Temperature: -- °C</div>
+            <img src="/images/temp.png" alt="Temperature Icon" class="w-6 h-6 object-contain ml-auto">
+          </div>
+          <h2 class="text-sm sm:text-base font-bold text-orange-500 italic text-center mt-auto">Temperature</h2>
+        </div>
+
+        <!-- Presence -->
+        <div class="bg-white p-3 rounded-lg shadow flex flex-col w-full">
+          <div class="flex items-center gap-2 mb-2 border-b border-gray-300 pb-1">
+            <div class="flex items-center justify-center bg-gray-100 text-orange-500 font-bold rounded-full text-xs px-2 py-0.5 whitespace-nowrap" id="motion-combined-status">Motion Status: --</div>
+            <img src="/images/presence.png" alt="Presence Icon" class="w-6 h-6 object-contain ml-auto">
+          </div>
+          <h2 class="text-sm sm:text-base font-bold text-orange-500 italic text-center mt-auto">Presence</h2>
+        </div>
+
+        <!-- Humidity -->
+        <div class="bg-white p-3 rounded-lg shadow flex flex-col w-full">
+          <div class="flex items-center gap-2 mb-2 border-b border-gray-300 pb-1">
+            <div class="text-sm sm:text-base text-blue-500 font-bold" id="humidity2">Humidity: -- %</div>
+            <img src="/images/humidity.png" alt="Humidity Icon" class="w-6 h-6 object-contain ml-auto">
+          </div>
+          <h2 class="text-sm sm:text-base font-bold text-orange-500 italic text-center mt-auto">Humidity</h2>
+        </div>
+
+        <!-- Lights -->
+        <div class="bg-white p-3 rounded-lg shadow flex flex-col w-full">
+          <div class="flex items-center gap-2 mb-2 border-b border-gray-300 pb-1">
+            <div class="text-sm sm:text-base text-orange-500 font-bold" id="light-status-combined">Light Status: --</div>
+            <div class="text-sm sm:text-base text-orange-500 font-bold hidden" id="light2">Light: --</div>
+            <img src="/images/light.png" alt="Lights Icon" class="w-6 h-6 object-contain ml-auto">
+          </div>
+          <h2 class="text-sm sm:text-base font-bold text-orange-500 italic text-center mt-auto">Lights</h2>
+        </div>
+
+        <!-- Timestamp -->
+        <div class="text-sm text-gray-500 mt-2 col-span-full" id="timestampsCombined">Timestamp: --</div>
+      </div>
+    </div>
+      <div class="w-full">
+    <div class="bg-white p-6 rounded-lg shadow-lg mt-6">
+      <h2 class="text-lg text-orange-500 font-bold mb-3">Overall System Status</h2>
+      <div class="text-2xl font-bold text-center" id="overall-status">Status: --</div>
+    </div>
+
+    <!-- Summary -->
+    <div id="sensor-summary" class="bg-white p-4 mt-6 rounded-lg shadow-md">
+      <h2 class="text-lg font-bold text-orange-500 mb-2">Device Status Summary</h2>
+      <ul id="status-list" class="list-disc pl-5 text-sm text-gray-700">
+        <li>Loading status...</li>
+      </ul>
+    </div>
+  </div>
+  </div>
+        </div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal -->
+			<div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+				<div class="bg-white p-6 rounded shadow-lg w-96">
+					<h2 class="text-xl font-bold mb-4 text-orange-600">Schedule Entry</h2>
+					<form id="scheduleForm" onsubmit="saveSchedule(event)">
+						<div class="space-y-4">
+							<div class="flex flex-col">
+								<label class="font-semibold text-gray-700">Selected Room:</label>
+								<input id="room" type="text" class="w-full p-2 border rounded bg-gray-100 cursor-not-allowed" readonly />
+							</div>
+
+							<div class="flex flex-col">
+								<label class="font-semibold text-gray-700">Select Date:</label>
+								<input type="date" id="date" class="w-full p-2 border rounded" required />
+							</div>
+						</div>
+
+						<div class="flex gap-4 mt-2">
+							<div class="w-1/2">
+								<label for="academicYear" class="block">Academic Year</label>
+								<select id="academicYear" class="w-full mb-2 p-2 border rounded" required>
+									<option value="2024-2025">2024-2025</option>
+									<option value="2025-2026">2025-2026</option>
+								</select>
+							</div>
+
+							<div class="w-1/2">
+								<label for="semester" class="block">Semester</label>
+								<select id="semester" name="semester" class="w-full p-2 border rounded">
+									<option value="1st">1st</option>
+									<option value="2nd">2nd</option>
+									<option value="Summer">Summer</option>
+								</select>
+							</div>
+						</div>
+						<!-- Start and End Time Dropdowns -->
+						<div class="flex gap-4 mb-2" id="time-fields-container">
+							<div class="w-1/2">
+								<label class="font-semibold text-gray-700">Start Time:</label>
+<input type="time" id="startTime" class="w-full p-2 border rounded" >
+
+							</div>
+							<div class="w-1/2">
+								<label class="font-semibold text-gray-700">End Time:</label>
+<input type="time" id="endTime" class="w-full p-2 border rounded" >
+							</div>
+						</div>
+						<div class="flex gap-4 mt-2">
+							<div class="w-1/2">
+								<label class="font-semibold text-gray-700">Select Year Level:</label>
+								<select id="yearLevel" class="w-full mb-2 p-2 border rounded" required>
+									<option value="BSCOE 1">BSCOE 1</option>
+									<option value="BSCOE 2">BSCOE 2</option>
+									<option value="BSCOE 3">BSCOE 3</option>
+									<option value="BSCOE 4">BSCOE 4</option>
+								</select>
+							</div>
+
+							<div class="w-1/2">
+								<label class="font-semibold text-gray-700">Select Section:</label>
+								<select id="section" class="w-full mb-2 p-2 border rounded" required>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+                  <option value="P">P</option>
+
+								</select>
+							</div>
+						</div>
+						<label class="font-semibold text-gray-700">Select Subject:</label>
+						<select id="subject" class="w-full mb-2 p-2 border rounded" required>
+              <option value="" selected disabled>Select subject...</option>
+              <option value="CMPE 011 - Computer Programming">CMPE 011 - Computer Programming</option>
+              <option value="CMPE 012 - Computer Programming">CMPE 012 - Computer Programming</option>
+              <option value="CMPE 014 - Microprocessor">CMPE 014 - Microprocessor</option>
+              <option value="CMPE 103 - Object Oriented Programming">CMPE 103 - Object Oriented Programming </option>
+              <option value="CMPE 104 - Discrete Mathematics">CMPE 104 - Discrete Mathematics</option>
+              <option value="CMPE 105 - Computer Hardware">CMPE 105 - Computer Hardware</option>
+              <option value="CMPE 202 - Operating Systems">CMPE 202 - Operating Systems</option>
+              <option value="CMPE 203 - Numerical Methods">CMPE 203 - Numerical Methods</option>
+              <option value="CMPE 204 - Advanced Mathemathics">CMPE 204 - Advanced Mathemathics</option>
+              <option value="CMPE 30063 - Numerical Methods">CMPE 30063 - Numerical Methods</option>
+              <option value="CMPE 30141 - CPE Drafting and Design">CMPE 30141 - CPE Drafting and Design</option>
+              <option value="CMPE 30174 - Computer Networks">CMPE 30174 - Computer Networks</option>
+              <option value="CMPE 30184 - Microprocessor">CMPE 30184 - Microprocessor</option>
+              <option value="CMPE 30224 - Computer Architecture">CMPE 30224 - Computer Architecture</option>
+              <option value="CMPE 30244 - Digital Signal Processing">CMPE 30244 - Digital Signal Processing</option>
+              <option value="CMPE 30274 - Embedded Systems">CMPE 30274 - Embedded Systems</option>
+              <option value="CMPE 30283 - Emerging Technology">CMPE 30283 - Emerging Technology</option>
+              <option value="CMPE 307 - Occupational Health and Safety">CMPE 307 - Occupational Health and Safety</option>         
+              <option value="CMPE 308 - CPE Laws">CMPE 308 - CPE Laws</option>
+              <option value="CMPE 309 - Feedback and Control Systems">CMPE 309 - Feedback and Control Systems</option>
+              <option value="CMPE 310 - Computer Networks">CMPE 310 - Computer Networks</option>
+              <option value="CMPE 311 - Microprocessor">CMPE 311 - Microprocessor</option>
+              <option value="CMPE 312 - Methods of Research">CMPE 312 - Methods of Research</option>
+              <option value="CMPE 361 - Enterprise Networking">CMPE 361 - Enterprise Networking</option>
+              <option value="CMPE 362 - Pattern Recognition">CMPE 362 - Pattern Recognition</option>
+              <option value="CMPE 363 - Big Data Analytics">CMPE 363 - Big Data Analytics</option>
+              <option value="CMPE 364 - Web and Mobile System">CMPE 364 Web and Mobile System</option>
+              <option value="CMPE 40103 - Cloud Computing">CMPE 40103 - Cloud Computing</option>
+              <option value="CMPE 40183 - Secure Data Management">CMPE 40183 - Secure Data Management</option>
+              <option value="CMPE 40193 - Enterprise Software Systems">CMPE 40193 - Enterprise Software Systems</option>
+              <option value="CMPE 40213 - Software Process">CMPE 40213 - Software Process</option>
+              <option value="CMPE 40223 - Trends in Software Development Processes">CMPE 40223 - Trends in Software Development Processes</option>
+              <option value="CMPE 40413 - Neural Networks">CMPE 40413 - Neural Networks</option>
+              <option value="ECEN 011 - Electronic Circuits">ECEN 011 - Electronic Circuits</option>
+              <option value="ENSC 121 - Computer Aided Drafting">ENSC 121 - Computer Aided Drafting</option>
+              <option value="ENSC 411 - Techno 101">ENSC 411 - Techno 101</option>
+              <option value="MATH 103 - Calculus 2">MATH 103 - Calculus 2</option>
+              <option value="PHYS 013 - Physics For Engineers">PHYS 013 - Physics For Engineers</option>         
+              <option value="STAT 012 - Engineering Data Analysis">STAT 012 - Engineering Data Analysis</option>
+              <option value="STAT 20023 - Engineering Data Analysis">STAT 20023 - Engineering Data Analysis</option>
+						</select>
+						<label class="font-semibold text-gray-700">Select Instructor:</label>
+						<select id="prof" class="w-full mb-2 p-2 border rounded" onchange="toggleCustomProf()" required>
+              <option value="" selected disabled>Select professor...</option>
+              <option value="John">Engr. John</option>
+              <option value="Dr. Remedios G. Ado">Dr. Remedios G. Ado</option>
+              <option value="Engr. Rolito L. Mahaguay">Engr. Rolito L. Mahaguay</option>
+              <option value="Engr. Joshua Benjamin B. Rodriguez">Engr. Joshua Benjamin B. Rodriguez</option>
+              <option value="Engr. Jake A. Binuya">Engr. Jake A. Binuya</option>
+              <option value="Engr. Julius S. Cansino">Engr. Julius S. Cansino</option>
+              <option value="Dr. Cherry D. Casuat">Dr. Cherry D. Casuat</option>
+              <option value="Engr. Arlene B. Canlas">Engr. Arlene B. Canlas</option>
+              <option value="Dr. Arvin R. De La Cruz">Dr. Arvin R. De La Cruz</option>
+              <option value="Engr. Ronald Fernando">Engr. Ronald Fernando</option>
+              <option value="Dr. Luisito L. Lacatan">Dr. Luisito L. Lacatan</option>
+              <option value="Engr. Jonathan C. Manarang">Engr. Jonathan C. Manarang</option>
+              <option value="Engr. Ferdinand O. Natividad">Engr. Ferdinand O. Natividad</option>
+              <option value="Engr. Florinda H. Oquindo">Engr. Florinda H. Oquindo</option>
+              <option value="Engr. Orlando V. Pajabera">Engr. Orlando V. Pajabera</option>
+              <option value="Dr. Lutzer U. Reyes">Dr. Lutzer U. Reyes</option>
+              <option value="Engr. Kim Joshua G. Tancinco">Engr. Kim Joshua G. Tancinco</option>
+              <option value="Engr. Pedrito M. Tenerife jr.">Engr. Pedrito M. Tenerife jr.</option>
+              <option value="Engr. Edcel B. Artificio">Engr. Edcel B. Artificio</option>
+              <option value="Engr. Godofredo T. Avena">Engr. Godofredo T. Avena</option>
+              <option value="Engr. John Paul S. Avila">Engr. John Paul S. Avila</option>
+              <option value="Engr. Marlon Jhon B. Bautista">Engr. Marlon Jhon B. Bautista</option>
+              <option value="Engr. John R. Dela Cruz">Engr. John R. Dela Cruz</option>
+              <option value="Engr. Ma. Leona S. Khan">Engr. Ma. Leona S. Khan</option>
+              <option value="Engr. Mary Ann V. Legarda">Engr. Mary Ann V. Legarda</option>
+              <option value="Engr. Julian L. Lorico jr.">Engr. Julian L. Lorico jr.</option>
+              <option value="Engr. Danilo Madrigalejos jr.">Engr. Danilo Madrigalejos jr.</option>
+              <option value="Engr. Adelino T. Racusa">Engr. Adelino T. Racusa</option>
+              <option value="Engr. Jerico Sarcillo">Engr. Jerico Sarcillo</option>
+              <option value="Engr. Jan Reuelle P. Teña">Engr. Jan Reuelle P. Teña</option>
+							<option value="Others">Others</option>
+							<!-- Added option -->
+						</select>
+						<input type="text" id="customProf" placeholder="Enter instructor name" class="w-full mb-2 p-2 border rounded hidden" oninput="removeSpecialChars(this)" />
+
+        <label class="font-semibold text-gray-700">Select Representative:</label>
+        <select id="representative" class="w-full mb-2 p-2 border rounded" onchange="toggleCustomRepresentative()" required>
+          <option value="" selected disabled>Select Representative...</option>
+            <option value="Hydee Palisoc">Hydee Palisoc</option>
+            <option value="Nicole Enriquez">Nicole Enriquez</option>
+            <option value="Juan">Juan</option>
+            <option value="John">John Rengel Jaylo</option>
+            <option value="Reiven Cabate">Reiven Cabate</option>
+            <option value="Ronan Valle">Ronan Valle</option>
+            <option value="Jay Andrey Amulong">Jay Amulong</option>
+            <option value="Others">Others</option>
+            <!-- Added option -->
+        </select>
+        <input type="text" id="customRepresentative" placeholder="Enter representative name" class="w-full mb-2 p-2 border rounded hidden" oninput="removeSpecialChars(this)" />
+
+						<div class="flex justify-end space-x-2 mt-4">
+							<button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-300 rounded">
+								Cancel
+							</button>
+							<button id="submitButton" type="submit" class="px-4 py-2 bg-orange-600 text-white rounded">
+								Save
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+  <script src="/index.js"></script>
+</html>
+
+

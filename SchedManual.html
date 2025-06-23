@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MANUAL TAGGING</title>
+    <link rel="icon" href="/images/favicon.ico" type="image/svg+xml">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/0d66da6825.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-100">
+
+    <div class="flex h-screen">
+
+              <!-- Sidebar -->
+              <div class="fixed h-full bg-orange-600 group transition-all duration-300 w-16 hover:w-64 z-20">
+                <div class="flex flex-col h-full">
+                    <a href="#" class="flex items-center p-4 border-b border-b-white">
+                        <img src="/images/CpELogo.jpg" alt="placeholder" class="w-8 h-8 rounded object-cover">
+                        <span class="ml-3 text-lg font-poppins text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            CpE Department
+                        </span>
+                    </a>
+                  <ul class="flex flex-col mt-4 space-y-2">
+                    <li><a href="./index.html" class="flex items-center px-4 py-2 text-white rounded-md hover:bg-orange-500 transition-all duration-300"><i class="fas fa-home text-2xl"></i><span class="ml-3 text-lg font-poppins opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Dashboard</span></a></li>
+                    <li><a href="./RoomManual.html" class="flex items-center px-4 py-2 text-white rounded-md hover:bg-orange-500 transition-all duration-300"><i class="fas fa-th-large text-2xl"></i><span class="ml-3 text-lg font-poppins opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Rooms</span></a></li>
+                    <li><a href="./SchedOriginal.html" class="flex items-center px-4 py-2 text-white rounded-md hover:bg-orange-500 transition-all duration-300"><i class="fas fa-calendar-alt text-2xl"></i><span class="ml-3 text-lg font-poppins opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Schedule</span></a></li>
+                    <li><a href="./logs.html" class="flex items-center px-4 py-2 text-white rounded-md hover:bg-orange-500 transition-all duration-300"><i class="fas fa-file-alt text-2xl"></i><span class="ml-3 text-lg font-poppins opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Logs</span></a></li>
+                </ul>
+                </div>
+            </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 ml-16 p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-orange-600">Manual Tagging of Schedule</h1>
+                <div class="flex items-center space-x-4">
+                    <!-- Day Filter and More Options - Flex Alignment -->
+                    <div class="flex items-center space-x-4">
+<button 
+  class="bg-orange-600 text-white px-5 py-1 whitespace-nowrap rounded focus:outline-none" 
+  onclick="window.location.href='SchedOriginal.html'">
+  Open Original Schedule
+</button>
+                        <div class="relative">
+                            <button class="bg-orange-600 text-white px-5 py-1 whitespace-nowrap rounded focus:outline-none" onclick="openModal('Add')">Add Schedule</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex space-x-6">
+                <!-- Room List -->
+                <div class="bg-white shadow-md rounded-lg p-4 w-1/2" style="width: 200px; height: 500px;">
+                    <h2 class="text-lg font-bold">Rooms</h2>
+                    <ul>
+                        <li><button onclick="updateSchedule(300)" class="border px-3 py-2 w-full rounded focus:outline-none focus:ring-orange-300 focus:border-orange-500">300</button></li>
+                        <li><button onclick="updateSchedule(302)" class="border px-3 py-2 w-full rounded focus:outline-none focus:ring-orange-300 focus:border-orange-500">302</button></li>
+                        <li><button onclick="updateSchedule(310)" class="border px-3 py-2 w-full rounded focus:outline-none focus:ring-orange-300 focus:border-orange-500">310</button></li>
+                        <li><button onclick="updateSchedule(311)" class="border px-3 py-2 w-full rounded focus:outline-none focus:ring-orange-300 focus:border-orange-500">311</button></li>
+                        <li><button onclick="updateSchedule(312)" class="border px-3 py-2 w-full rounded focus:outline-none focus:ring-orange-300 focus:border-orange-500">312</button></li>
+                        <li><button onclick="updateSchedule(313)" class="border px-3 py-2 w-full rounded focus:outline-none focus:ring-orange-300 focus:border-orange-500">313</button></li>
+                        <li><button onclick="updateSchedule(314)" class="border px-3 py-2 w-full rounded focus:outline-none focus:ring-orange-300 focus:border-orange-500">314</button></li>
+                        <li><button onclick="updateSchedule(315)" class="border px-3 py-2 w-full rounded focus:outline-none focus:ring-orange-300 focus:border-orange-500">315</button></li>
+                        <li><button onclick="updateSchedule(316)" class="border px-3 py-2 w-full rounded focus:outline-none focus:ring-orange-300 focus:border-orange-500">316</button></li>
+                    </ul>                    
+                </div>
+                <!-- Schedule Display -->
+                <div id="room-schedule" class="bg-white shadow-md rounded-lg p-4 w-2/3"
+                    style="max-height: 600px; width: 1200px; overflow-y: auto;">
+                    <h2 id="room-title" class="text-center text-xl font-bold text-orange-600 mb-4">Select a room</h2>
+                    <p>Select a room to view its schedule.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Modal -->
+<div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white p-6 rounded shadow-lg w-96">
+      <h2 class="text-xl font-bold mb-4 text-orange-600">Schedule Entry</h2>
+      <form id="scheduleForm" onsubmit="saveSchedule(event)">
+        <div class="space-y-4">
+            <div class="flex flex-col">
+                <label class="font-semibold text-gray-700">Select Room:</label>
+                <select id="room" class="w-full p-2 border rounded" required>
+                    <option value="300">ROOM 300</option>
+                    <option value="302">ROOM 302</option>
+                    <option value="310">ROOM 310</option>
+                    <option value="311">ROOM 311</option>
+                    <option value="312">ROOM 312</option>
+                    <option value="313">ROOM 313</option>
+                    <option value="314">ROOM 314</option>
+                    <option value="315">ROOM 315</option>
+                    <option value="316">ROOM 316</option>
+                </select>
+            </div>
+        
+            <div class="flex flex-col">
+                <label class="font-semibold text-gray-700">Select Date:</label>
+                <input type="date" id="date" class="w-full p-2 border rounded" required />
+            </div>
+        </div>
+             
+          <div class="flex gap-4 mt-2">
+            <div class="w-1/2">
+              <label for="academicYear" class="block">Academic Year</label>
+              <select id="academicYear" class="w-full mb-2 p-2 border rounded" required>
+                <option value="2024-2025">2024-2025</option>
+                <option value="2025-2026">2025-2026</option>
+              </select>            
+            </div>
+            
+            <div class="w-1/2">
+              <label for="semester" class="block">Semester</label>
+              <select id="semester" name="semester" class="w-full p-2 border rounded">
+                <option value="1st">1st</option>
+                <option value="2nd">2nd</option>
+                <option value="Summer">Summer</option>
+              </select>
+            </div>
+          </div>
+						<!-- Start and End Time Dropdowns -->
+						<div class="flex gap-4 mb-2" id="time-fields-container">
+							<div class="w-1/2">
+								<label class="font-semibold text-gray-700">Start Time:</label>
+<input type="time" id="startTime" class="w-full p-2 border rounded" required>
+
+							</div>
+							<div class="w-1/2">
+								<label class="font-semibold text-gray-700">End Time:</label>
+<input type="time" id="endTime" class="w-full p-2 border rounded" required>
+							</div>
+						</div>
+          <div class="flex gap-4 mt-2">
+            <div class="w-1/2">
+                <label class="font-semibold text-gray-700">Select Year Level:</label>
+                <select id="yearLevel" class="w-full mb-2 p-2 border rounded" required>
+                  <option value="BSCOE 1">BSCOE 1</option>
+                  <option value="BSCOE 2">BSCOE 2</option>
+                  <option value="BSCOE 3">BSCOE 3</option>
+                  <option value="BSCOE 4">BSCOE 4</option>
+                </select>    
+            </div>
+            
+            <div class="w-1/2">
+                <label class="font-semibold text-gray-700">Select Section:</label>
+                <select id="section" class="w-full mb-2 p-2 border rounded" required>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                </select>
+            </div>
+          </div>        
+        <label class="font-semibold text-gray-700">Select Subject:</label>
+        <select id="subject" class="w-full mb-2 p-2 border rounded" required>
+          <option value="CMPE 011 - Computer Programming">CMPE 011 - Computer Programming</option>
+          <option value="CMPE 012 - Computer Programming">CMPE 012 - Computer Programming</option>
+          <option value="CMPE 014 - Microprocessor">CMPE 014 - Microprocessor</option>
+          <option value="CMPE 103 - Object Oriented Programming">CMPE 103 - Object Oriented Programming </option>
+          <option value="CMPE 104 - Discrete Mathematics">CMPE 104 - Discrete Mathematics</option>
+          <option value="CMPE 105 - Computer Hardware">CMPE 105 - Computer Hardware</option>
+          <option value="CMPE 202 - Operating Systems">CMPE 202 - Operating Systems</option>
+          <option value="CMPE 203 - Numerical Methods">CMPE 203 - Numerical Methods</option>
+          <option value="CMPE 204 - Advanced Mathemathics">CMPE 204 - Advanced Mathemathics</option>
+          <option value="CMPE 30063 - Numerical Methods">CMPE 30063 - Numerical Methods</option>
+          <option value="CMPE 30141 - CPE Drafting and Design">CMPE 30141 - CPE Drafting and Design</option>
+          <option value="CMPE 30174 - Computer Networks">CMPE 30174 - Computer Networks</option>
+          <option value="CMPE 30184 - Microprocessor">CMPE 30184 - Microprocessor</option>
+          <option value="CMPE 30224 - Computer Architecture">CMPE 30224 - Computer Architecture</option>
+          <option value="CMPE 30244 - Digital Signal Processing">CMPE 30244 - Digital Signal Processing</option>
+          <option value="CMPE 30274 - Embedded Systems">CMPE 30274 - Embedded Systems</option>
+          <option value="CMPE 30283 - Emerging Technology">CMPE 30283 - Emerging Technology</option>
+          <option value="CMPE 307 - Occupational Health and Safety">CMPE 307 - Occupational Health and Safety</option>         
+          <option value="CMPE 308 - CPE Laws">CMPE 308 - CPE Laws</option>
+          <option value="CMPE 309 - Feedback and Control Systems">CMPE 309 - Feedback and Control Systems</option>
+          <option value="CMPE 310 - Computer Networks">CMPE 310 - Computer Networks</option>
+          <option value="CMPE 311 - Microprocessor">CMPE 311 - Microprocessor</option>
+          <option value="CMPE 312 - Methods of Research">CMPE 312 - Methods of Research</option>
+          <option value="CMPE 361 - Enterprise Networking">CMPE 361 - Enterprise Networking</option>
+          <option value="CMPE 362 - Pattern Recognition">CMPE 362 - Pattern Recognition</option>
+          <option value="CMPE 363 - Big Data Analytics">CMPE 363 - Big Data Analytics</option>
+          <option value="CMPE 364 - Web and Mobile System">CMPE 364 Web and Mobile System</option>
+          <option value="CMPE 40103 - Cloud Computing">CMPE 40103 - Cloud Computing</option>
+          <option value="CMPE 40183 - Secure Data Management">CMPE 40183 - Secure Data Management</option>
+          <option value="CMPE 40193 - Enterprise Software Systems">CMPE 40193 - Enterprise Software Systems</option>
+          <option value="CMPE 40213 - Software Process">CMPE 40213 - Software Process</option>
+          <option value="CMPE 40223 - Trends in Software Development Processes">CMPE 40223 - Trends in Software Development Processes</option>
+          <option value="CMPE 40413 - Neural Networks">CMPE 40413 - Neural Networks</option>
+          <option value="ECEN 011 - Electronic Circuits">ECEN 011 - Electronic Circuits</option>
+          <option value="ENSC 121 - Computer Aided Drafting">ENSC 121 - Computer Aided Drafting</option>
+          <option value="ENSC 411 - Techno 101">ENSC 411 - Techno 101</option>
+          <option value="MATH 103 - Calculus 2">MATH 103 - Calculus 2</option>
+          <option value="PHYS 013 - Physics For Engineers">PHYS 013 - Physics For Engineers</option>         
+          <option value="STAT 012 - Engineering Data Analysis">STAT 012 - Engineering Data Analysis</option>
+          <option value="STAT 20023 - Engineering Data Analysis">STAT 20023 - Engineering Data Analysis</option>
+        </select>
+  
+        <label class="font-semibold text-gray-700">Select Instructor:</label>
+        <select id="prof" class="w-full mb-2 p-2 border rounded" onchange="toggleCustomProf()" required>
+          <option value="John">Engr. John</option>
+          <option value="Dr. Remedios G. Ado">Dr. Remedios G. Ado</option>
+          <option value="Engr. Rolito L. Mahaguay">Engr. Rolito L. Mahaguay</option>
+          <option value="Engr. Joshua Benjamin B. Rodriguez">Engr. Joshua Benjamin B. Rodriguez</option>
+          <option value="Engr. Jake A. Binuya">Engr. Jake A. Binuya</option>
+          <option value="Engr. Julius S. Cansino">Engr. Julius S. Cansino</option>
+          <option value="Dr. Cherry D. Casuat">Dr. Cherry D. Casuat</option>
+          <option value="Engr. Arlene B. Canlas">Engr. Arlene B. Canlas</option>
+          <option value="Dr. Arvin R. De La Cruz">Dr. Arvin R. De La Cruz</option>
+          <option value="Engr. Ronald Fernando">Engr. Ronald Fernando</option>
+          <option value="Dr. Luisito L. Lacatan">Dr. Luisito L. Lacatan</option>
+          <option value="Engr. Jonathan C. Manarang">Engr. Jonathan C. Manarang</option>
+          <option value="Engr. Ferdinand O. Natividad">Engr. Ferdinand O. Natividad</option>
+          <option value="Engr. Florinda H. Oquindo">Engr. Florinda H. Oquindo</option>
+          <option value="Engr. Orlando V. Pajabera">Engr. Orlando V. Pajabera</option>
+          <option value="Dr. Lutzer U. Reyes">Dr. Lutzer U. Reyes</option>
+          <option value="Engr. Kim Joshua G. Tancinco">Engr. Kim Joshua G. Tancinco</option>
+          <option value="Engr. Pedrito M. Tenerife jr.">Engr. Pedrito M. Tenerife jr.</option>
+          <option value="Engr. Edcel B. Artificio">Engr. Edcel B. Artificio</option>
+          <option value="Engr. Godofredo T. Avena">Engr. Godofredo T. Avena</option>
+          <option value="Engr. John Paul S. Avila">Engr. John Paul S. Avila</option>
+          <option value="Engr. Marlon Jhon B. Bautista">Engr. Marlon Jhon B. Bautista</option>
+          <option value="Engr. John R. Dela Cruz">Engr. John R. Dela Cruz</option>
+          <option value="Engr. Ma. Leona S. Khan">Engr. Ma. Leona S. Khan</option>
+          <option value="Engr. Mary Ann V. Legarda">Engr. Mary Ann V. Legarda</option>
+          <option value="Engr. Julian L. Lorico jr.">Engr. Julian L. Lorico jr.</option>
+          <option value="Engr. Danilo Madrigalejos jr.">Engr. Danilo Madrigalejos jr.</option>
+          <option value="Engr. Adelino T. Racusa">Engr. Adelino T. Racusa</option>
+          <option value="Engr. Jerico Sarcillo">Engr. Jerico Sarcillo</option>
+          <option value="Engr. Jan Reuelle P. Teña">Engr. Jan Reuelle P. Teña</option>
+          <option value="Others">Others</option>
+            <!-- Added option -->
+        </select>
+        <input type="text" id="customProf" placeholder="Enter instructor name" class="w-full mb-2 p-2 border rounded hidden" oninput="removeSpecialChars(this)" />
+
+        <label class="font-semibold text-gray-700">Select Representative:</label>
+        <select id="representative" class="w-full mb-2 p-2 border rounded" onchange="toggleCustomRepresentative()" required>
+          <option value="Hydee Palisoc">Hydee Palisoc</option>
+          <option value="Nicole Enriquez">Nicole Enriquez</option>
+          <option value="Juan">Juan</option>
+          <option value="John">John Rengel Jaylo</option>
+          <option value="Reiven Cabate">Reiven Cabate</option>
+          <option value="Ronan Valle">Ronan Valle</option>
+          <option value="Jay Andrey Amulong">Jay Amulong</option>
+          <option value="Others">Others</option>
+            <!-- Added option -->
+        </select>
+        <input type="text" id="customRepresentative" placeholder="Enter representative name" class="w-full mb-2 p-2 border rounded hidden" oninput="removeSpecialChars(this)" />
+  
+        <div class="flex justify-end space-x-2 mt-4">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+          <button id="submitButton" type="submit" class="px-4 py-2 bg-orange-600 text-white rounded">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+<!-- Script for functions -->
+<script>
+    // Dropdown menu code
+    let dropdown = document.getElementById("dropdownMenu");
+
+    function toggleDropdown() {
+        dropdown.classList.toggle("hidden");
+    
+        if (!dropdown.classList.contains("hidden")) {
+            dropdown.classList.remove("opacity-0", "scale-95");
+            dropdown.classList.add("opacity-100", "scale-100");
+        } else {
+            dropdown.classList.remove("opacity-100", "scale-100");
+            dropdown.classList.add("opacity-0", "scale-95");
+        }
+    }
+    
+
+    document.addEventListener("click", function (event) {
+        let button = document.querySelector("button[onclick='toggleDropdown()']");
+        if (!dropdown.contains(event.target) && !button.contains(event.target)) {
+            dropdown.classList.add("hidden");
+        }
+    });
+
+    function openModal(mode = 'Add') {
+        document.getElementById("modal").classList.remove("hidden");
+
+        if (mode === 'Add') {
+            currentSchedule = null;
+            document.getElementById("scheduleForm").reset(); // Only reset on Add
+        }
+        //Time disable click
+  document.getElementById('room').addEventListener('change', function () {
+    const isRoom315 = this.value === '315';
+    const startTime = document.getElementById('startTime');
+    const endTime = document.getElementById('endTime');
+
+    startTime.disabled = isRoom315;
+    endTime.disabled = isRoom315;
+
+    if (isRoom315) {
+      startTime.value = "";
+      endTime.value = "";
+    }
+  }
+  );
+    }
+
+    function closeModal() {
+        document.getElementById("modal").classList.add("hidden");
+        currentSchedule = null;
+        document.getElementById("scheduleForm").reset();
+    }
+
+    const SUPABASE_URL = 'https://vzubmycafgnjtwnjfpop.supabase.co';
+    const SUPABASE_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6dWJteWNhZmduanR3bmpmcG9wIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NDM0NjY1NCwiZXhwIjoyMDU5OTIyNjU0fQ.c7xkLWthN-SHSjJjs22CDy45MvfEFGxH7A-JD4aOSxI';
+    const TABLE_NAME = 'schedules_manualv2';  // Updated to match table name
+
+    let currentSchedule = null;
+
+// Format time into 12-hour format with AM/PM
+function formatTimeTo12Hour(timeString, adjustFor315 = false) {
+    const date = new Date(timeString);
+
+    if (adjustFor315) {
+        // Subtract 8 hours (UTC+8)
+        date.setHours(date.getHours() - 8);
+    }
+
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'pm' : 'am';
+
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+
+    return `${hours}:${minutes} ${ampm}`;
+}
+
+
+    // Update schedule and display it in the table
+    async function updateSchedule(room) {
+        try {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}?room=eq.${room}&select=*`, {
+                headers: {
+                    'apikey': SUPABASE_API_KEY,
+                    'Authorization': `Bearer ${SUPABASE_API_KEY}`
+                }
+            });
+
+            if (!response.ok) throw new Error(await response.text());
+
+            let scheduleData = await response.json();
+
+            let table = `<table class='w-full border-collapse border border-gray-400 mt-4'>
+                <thead>
+                    <tr class='bg-orange-500 text-white'>
+                        <th class='border border-gray-400 px-4 py-2'>Section</th>
+                        <th class='border border-gray-400 px-4 py-2'>Subject</th>
+                        <th class='border border-gray-400 px-4 py-2'>Instructor</th>
+                        <th class='border border-gray-400 px-4 py-2'>Representative</th>
+                        <th class='border border-gray-400 px-4 py-2'>Date</th>
+                        <th class='border border-gray-400 px-4 py-2'>Academic Year</th>
+                        <th class='border border-gray-400 px-4 py-2'>Semester</th>
+                        <th class='border border-gray-400 px-4 py-2'>Time</th>
+                        <th class='border border-gray-400 px-4 py-2'>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            if (scheduleData.length > 0) {
+                scheduleData.forEach((s) => {
+                    // Format start and end times
+             let timeDisplay = "N/A";
+
+if (s.start_time && s.end_time) {
+    const isRoom315 = s.room === "315";
+
+const startDate = new Date(s.start_time);
+const endDate = new Date(s.end_time);
+
+// Adjust for Room 315 by subtracting 8 hours
+if (s.room === "315") {
+    startDate.setHours(startDate.getHours() - 8);
+    endDate.setHours(endDate.getHours() - 8);
+}
+
+// Sort so the earlier time comes first
+const first = startDate < endDate ? startDate : endDate;
+const second = startDate < endDate ? endDate : startDate;
+
+const start = formatTimeTo12Hour(first);
+const end = formatTimeTo12Hour(second);
+timeDisplay = `${start} - ${end}`;
+
+}
+
+
+
+                    table += `<tr>
+                        <td class='border border-gray-400 px-4 py-2'>${s.section}</td>
+                        <td class='border border-gray-400 px-4 py-2'>${s.subject}</td>
+                        <td class='border border-gray-400 px-4 py-2'>${s.prof}</td>
+                         <td class='border border-gray-400 px-4 py-2'>${s.representative}</td>
+                        <td class='border border-gray-400 px-4 py-2'>${s.date}</td>
+                        <td class='border border-gray-400 px-4 py-2'>${s.academicYear}</td>
+                        <td class='border border-gray-400 px-4 py-2'>${s.semester}</td>
+                        <td class='border border-gray-400 px-4 py-2'>${timeDisplay}</td>
+
+                        <td class='border border-gray-400 px-4 py-2'>
+                        <button onclick='editSchedule(${JSON.stringify(s)})' class='text-blue-600 underline mr-2'>Edit</button>
+                        <button onclick='deleteSchedule(${s.id}, "${room}")' class='text-red-600 underline'>Delete</button>
+                        </td>
+                    </tr>`;
+                });
+            } else {
+                table += `<tr>
+                    <td colspan='8' class='border border-gray-400 px-4 py-2 text-center text-red-500'>No schedule available</td>
+                </tr>`;
+            }
+
+            table += `</tbody></table>`;
+            document.getElementById("room-schedule").innerHTML =
+                `<h2 class="text-center text-xl font-bold text-orange-600 mb-4">Room ${room}</h2>` + table;
+
+        } catch (err) {
+            console.error("Error fetching schedule:", err.message);
+            alert("Error loading schedule: " + err.message);
+        }
+    }
+
+// Edit schedule details
+function editSchedule(schedule) {
+    currentSchedule = schedule; // Store the schedule to edit
+    document.getElementById("room").value = schedule.room;
+    document.getElementById("date").value = schedule.date;
+    document.getElementById("academicYear").value = schedule.academicYear || "";
+    document.getElementById("semester").value = schedule.semester || "";
+    document.getElementById("startTime").value = schedule.start_time ? new Date(schedule.start_time).toLocaleTimeString() : "";
+    document.getElementById("endTime").value = schedule.end_time ? new Date(schedule.end_time).toLocaleTimeString() : "";
+    document.getElementById("section").value = schedule.section;
+    document.getElementById("subject").value = schedule.subject;
+    document.getElementById("prof").value = schedule.prof;
+    document.getElementById("representative").value = schedule.representative;
+    openModal('Edit'); // Open modal in Edit mode
+}
+
+// Save schedule (both for add and edit)
+// Save schedule (both for add and edit)
+async function saveSchedule(event) {
+    event?.preventDefault?.();
+    
+    // Get values from the form
+    let room = document.getElementById("room").value.trim();
+    let date = document.getElementById("date").value.trim(); // Accept date as-is (string)
+    let academicYear = document.getElementById("academicYear").value.trim();
+    let semester = document.getElementById("semester").value.trim();
+let startTimeValue = document.getElementById("startTime").disabled ? null : document.getElementById("startTime").value.trim();
+let endTimeValue = document.getElementById("endTime").disabled ? null : document.getElementById("endTime").value.trim();
+
+let startDateTime = startTimeValue ? new Date(`${date}T${startTimeValue}`).toISOString() : null;
+let endDateTime = endTimeValue ? new Date(`${date}T${endTimeValue}`).toISOString() : null;
+
+
+    // Combine Year Level and Section
+    let yearLevel = document.getElementById("yearLevel").value.trim();
+    let section = document.getElementById("section").value.trim();
+    let combinedSection = `${yearLevel}-${section}`;
+
+
+//Form others
+let subject = document.getElementById("subject").value.trim();
+let prof = document.getElementById("prof").value.trim();
+if (prof === "Others") {
+  prof = document.getElementById("customProf").value.trim();
+}
+let representative = document.getElementById("representative").value.trim();
+if (representative === "Others") {
+  representative = document.getElementById("customRepresentative").value.trim();
+}
+
+    // Validation check
+    if (!room || !date || !academicYear || !startTime || !endTime || !semester || !combinedSection || !subject || !prof || !representative) {
+        alert("Please fill in all fields before saving.");
+        return;
+    }
+
+    const submitButton = document.getElementById("submitButton");
+    if (submitButton) submitButton.disabled = true;
+
+    try {
+        const isEditing = currentSchedule !== null; // Check if we're editing
+        const method = isEditing ? 'PATCH' : 'POST'; // Use PATCH for editing, POST for creating
+        const url = isEditing
+            ? `${SUPABASE_URL}/rest/v1/${TABLE_NAME}?id=eq.${currentSchedule.id}` // Update existing schedule
+            : `${SUPABASE_URL}/rest/v1/${TABLE_NAME}`; // Create new schedule
+
+        const response = await fetch(url, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': SUPABASE_API_KEY,
+                'Authorization': `Bearer ${SUPABASE_API_KEY}`,
+                'Prefer': 'return=representation'
+            },
+body: JSON.stringify({
+    room,
+    date,
+    academicYear,
+    start_time: startDateTime,
+    end_time: endDateTime,
+    section: combinedSection,
+    subject,
+    prof,
+    representative,
+    semester
+})
+
+        });
+
+        if (!response.ok) throw new Error(await response.text());
+
+        alert(isEditing ? "Schedule updated!" : "Schedule saved!");
+        closeModal();
+        currentSchedule = null; // Reset currentSchedule after saving or updating
+        updateSchedule(room); // Refresh the schedule for that room
+
+    } catch (err) {
+        console.error("Save error:", err.message);
+        alert("Failed: " + err.message);
+    } finally {
+        if (submitButton) submitButton.disabled = false;
+    }
+}
+
+
+    // Delete schedule
+    async function deleteSchedule(id, room) {
+        const confirmed = confirm("Are you sure you want to delete this schedule?");
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}?id=eq.${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': SUPABASE_API_KEY,
+                    'Authorization': `Bearer ${SUPABASE_API_KEY}`,
+                    'Prefer': 'return=representation'
+                }
+            });
+
+            if (!response.ok) throw new Error(await response.text());
+
+            alert("Schedule deleted.");
+            updateSchedule(room);
+        } catch (err) {
+            console.error("Delete error:", err.message);
+            alert("Delete error: " + err.message);
+        }
+    }
+
+//Add others in form rep
+  function toggleCustomRepresentative() {
+  const representativeDropdown = document.getElementById("representative");
+  const customRepresentativeInput = document.getElementById("customRepresentative");
+  if (representativeDropdown.value === "Others") {
+    customRepresentativeInput.classList.remove("hidden");
+    customRepresentativeInput.required = true;
+  } else {
+    customRepresentativeInput.classList.add("hidden");
+    customRepresentativeInput.required = false;
+  }
+}
+alert(isEditing ? "Schedule updated!" : "Schedule saved!");
+
+  //Add others in form prof
+  function toggleCustomProf() {
+  const profDropdown = document.getElementById("prof");
+  const customProfInput = document.getElementById("customProf");
+  if (profDropdown.value === "Others") {
+    customProfInput.classList.remove("hidden");
+    customProfInput.required = true;
+  } else {
+    customProfInput.classList.add("hidden");
+    customProfInput.required = false;
+  }
+}
+alert(isEditing ? "Schedule updated!" : "Schedule saved!");
+
+//special characters
+function removeSpecialChars(input) {
+  const original = input.value;
+  const cleaned = original
+    .replace(/[^a-zA-Z0-9. ]/g, '') // Allow letters, digits, space, dot
+    .replace(/\.(?=.*\.)/g, '');    // Allow only one dot (remove all but the first)
+  input.value = cleaned;
+}
+
+
+
+
+//Functions for lOGS SAVING
+</script>
+</body>
+</html>

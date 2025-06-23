@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NICE</title>
+</head>
+<body>
+    <p>GOOD</p>
+    
+</body>
+</html>
+<!--For sensors-->
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const SUPABASE_URL = 'https://vzubmycafgnjtwnjfpop.supabase.co';
+  const SUPABASE_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6dWJteWNhZmduanR3bmpmcG9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQzNDY2NTQsImV4cCI6MjA1OTkyMjY1NH0.fDzlvR0xT3Sm8BTlCnEbxC8WE8-H3ZBRxA9SeEViaeo'; // shortened for safety
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_API_KEY);
+
+  async function fetchAndRenderCombinedData() {
+    const [res1, res2] = await Promise.all([
+      client.from('comp_data').select('*').order('created_at', { ascending: false }).limit(1),
+      client.from('comp_data2').select('*').order('created_at', { ascending: false }).limit(1),
+    ]);
+
+    if (!res1.data.length && !res2.data.length) return;
+
+    const d1 = res1.data[0] || {};
+    const d2 = res2.data[0] || {};
+
+    const combined = {
+      temperature: Math.min(d1.temperature ?? 100, d2.temperature ?? 100),
+      humidity: Math.max(d1.humidity ?? 0, d2.humidity ?? 0),
+      light: Math.max(d1.light ?? 0, d2.light ?? 0),
+      motion: (d1.motion === 1 || d2.motion === 1) ? 1 : 0,
+      created_at: new Date(Math.max(new Date(d1.created_at || 0), new Date(d2.created_at || 0)))
+    };
+
+    document.getElementById("temperatureCombined").textContent = `Temperature: ${combined.temperature.toFixed(1)} °C`;
+    document.getElementById("humidity2").textContent = `Humidity: ${combined.humidity.toFixed(1)} %`;
+    document.getElementById("light2").textContent = `Light: ${combined.light}`;
+    document.getElementById("timestampsCombined").textContent = `Timestamp: ${combined.created_at.toLocaleString()}`;
+
+    document.getElementById("temperature-combined").textContent = `Aircon Status: ${combined.temperature < 33 ? 'On' : 'Off'}`;
+    document.getElementById("light-status-combined").textContent = `Light Status: ${combined.light > 50 ? 'On' : 'Off'}`;
+    document.getElementById("motion-combined-status").textContent = `Motion Status: ${combined.motion === 1 ? 'Motion Detected' : 'No Motion'}`;
+
+    const isOn = combined.temperature < 33 || combined.light > 50 || combined.motion === 1;
+    const overallStatus = document.getElementById("overall-status");
+    overallStatus.textContent = `Status: ${isOn ? 'ON' : 'OFF'}`;
+    overallStatus.className = `text-2xl font-bold text-center ${isOn ? 'text-green-600' : 'text-red-600'}`;
+
+    const listElement = document.getElementById('status-list');
+    listElement.innerHTML = '';
+    const statusList = [
+      `Temperature: ${combined.temperature < 33 ? 'ON' : 'OFF'}`,
+      `Light: ${combined.light > 50 ? 'ON' : 'OFF'}`,
+      `Motion: ${combined.motion === 1 ? 'DETECTED' : 'NONE'}`
+    ];
+    statusList.forEach((line) => {
+      const li = document.createElement('li');
+      li.textContent = line;
+      li.className = line.includes('ON') || line.includes('DETECTED') ? 'text-green-600 font-semibold' : 'text-gray-500';
+      listElement.appendChild(li);
+    });
+  }
+
+  await fetchAndRenderCombinedData();
+});
+
+  const overallStatusElement = document.getElementById("overall-status");
+  const roomStatusElement = document.getElementById("room-status");
+
+  // Observer to watch for changes in overall system status
+  const observer = new MutationObserver(() => {
+    if (currentRoom === "315") {
+      const systemStatus = overallStatusElement.textContent.trim().toUpperCase();
+      if (systemStatus.includes("ON")) {
+        roomStatusElement.textContent = "Occupied";
+      } else if (systemStatus.includes("OFF")) {
+        roomStatusElement.textContent = "Available";
+      } else {
+        roomStatusElement.textContent = "Unknown";
+      }
+    }
+  });
+
+  // Start observing changes to the overall system status
+  if (overallStatusElement) {
+    observer.observe(overallStatusElement, { childList: true, subtree: true });
+  }
+</script>
